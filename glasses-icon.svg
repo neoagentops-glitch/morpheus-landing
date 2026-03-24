@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-130 -60 260 120" width="260" height="120">
+  <defs>
+    <radialGradient id="lensL" cx="0.38" cy="0.35" r="0.65">
+      <stop offset="0%" stop-color="#242424"/>
+      <stop offset="40%" stop-color="#1a1a1a"/>
+      <stop offset="100%" stop-color="#0e0e0e"/>
+    </radialGradient>
+    <radialGradient id="lensR" cx="0.4" cy="0.32" r="0.65">
+      <stop offset="0%" stop-color="#222222"/>
+      <stop offset="40%" stop-color="#181818"/>
+      <stop offset="100%" stop-color="#0c0c0c"/>
+    </radialGradient>
+    <radialGradient id="specL" cx="0.35" cy="0.3" r="0.45">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="specR" cx="0.38" cy="0.28" r="0.45">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bridgeMetal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#333333"/>
+      <stop offset="50%" stop-color="#1a1a1a"/>
+      <stop offset="100%" stop-color="#2a2a2a"/>
+    </linearGradient>
+  </defs>
+  <!-- Left lens -->
+  <ellipse cx="-66" cy="2" rx="53.5" ry="39.5" fill="none" stroke="#333" stroke-width="1.2" opacity="0.3"/>
+  <ellipse cx="-66" cy="2" rx="52" ry="38" fill="url(#lensL)" stroke="#2a2a2a" stroke-width="0.5"/>
+  <ellipse cx="-66" cy="2" rx="48" ry="35" fill="none" stroke="#1f1f1f" stroke-width="0.3" opacity="0.5"/>
+  <ellipse cx="-82" cy="-12" rx="24" ry="14" fill="url(#specL)"/>
+  <ellipse cx="-86" cy="-16" rx="8" ry="5" fill="#ffffff" opacity="0.08"/>
+  <!-- Right lens -->
+  <ellipse cx="66" cy="-2" rx="53.5" ry="39.5" fill="none" stroke="#2e2e2e" stroke-width="1" opacity="0.25"/>
+  <ellipse cx="66" cy="-2" rx="52" ry="38" fill="url(#lensR)" stroke="#282828" stroke-width="0.5"/>
+  <ellipse cx="66" cy="-2" rx="48" ry="35" fill="none" stroke="#1e1e1e" stroke-width="0.3" opacity="0.5"/>
+  <ellipse cx="50" cy="-14" rx="21" ry="12" fill="url(#specR)"/>
+  <ellipse cx="47" cy="-17" rx="7" ry="4" fill="#ffffff" opacity="0.06"/>
+  <!-- Bridge -->
+  <path d="M -18 -10 C -10 -20 10 -18 18 -10" fill="none" stroke="url(#bridgeMetal)" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M -14 -12 C -8 -19 8 -17 14 -12" fill="none" stroke="#444" stroke-width="1" stroke-linecap="round" opacity="0.3"/>
+  <!-- Spring arms -->
+  <line x1="-18" y1="-10" x2="-26" y2="-2" stroke="#252525" stroke-width="2.6" stroke-linecap="round"/>
+  <line x1="18" y1="-10" x2="26" y2="-2" stroke="#252525" stroke-width="2.6" stroke-linecap="round"/>
+  <!-- Nose pads -->
+  <circle cx="-28" cy="0" r="2.8" fill="#222"/>
+  <circle cx="28" cy="0" r="2.8" fill="#222"/>
+</svg>

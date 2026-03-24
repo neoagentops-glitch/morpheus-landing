@@ -5,9 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Morpheus — Desktop Command Center for OpenClaw</title>
   <meta name="description" content="One screen. All your agents. Morpheus is the native desktop app for managing OpenClaw multi-agent workflows. Built with Tauri v2. Free tier available." />
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <!-- Open Graph -->
   <meta property="og:title" content="Morpheus — Desktop Command Center for OpenClaw" />
   <meta property="og:description" content="One screen. All your agents. Built with Tauri v2. Free tier available." />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://morpheusdesktop.com" />
+  <meta property="og:image" content="https://morpheusdesktop.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Morpheus — Desktop Command Center for OpenClaw" />
+  <meta name="twitter:description" content="One screen. All your agents. Built with Tauri v2. Free tier available." />
+  <meta name="twitter:image" content="https://morpheusdesktop.com/og-image.png" />
+  <meta name="twitter:site" content="@NeoAgentOps" />
   <!-- Plausible Analytics -->
   <script defer data-domain="morpheusdesktop.com" src="https://plausible.io/js/script.js"></script>
   <style>
@@ -47,12 +63,16 @@
       z-index: 100;
     }
     .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       font-size: 1.2rem;
       font-weight: 700;
       letter-spacing: -0.02em;
       color: var(--text);
     }
     .nav-logo span { color: var(--accent-light); }
+    .nav-glasses { display: block; filter: brightness(2.5); }
     .nav-cta {
       background: var(--accent);
       color: #fff;
@@ -318,7 +338,10 @@
 <body>
 
 <nav>
-  <div class="nav-logo">Morpheus<span>.</span></div>
+  <div class="nav-logo">
+    <img src="/glasses-icon.svg" alt="Morpheus" class="nav-glasses" width="36" height="16" />
+    Morpheus<span>.</span>
+  </div>
   <a class="nav-cta" href="#early-access">Get Early Access</a>
 </nav>
 
@@ -407,7 +430,7 @@
         <li>Task history (7 days)</li>
         <li>Community support</li>
       </ul>
-      <a class="pricing-btn pricing-btn-outline" href="#early-access">Join Waitlist (Free)</a>
+      <a class="pricing-btn pricing-btn-outline" href="#early-access">Get Early Access (Free)</a>
     </div>
     <div class="pricing-card featured">
       <div class="pricing-badge">Most Popular</div>
@@ -422,9 +445,15 @@
         <li>Priority support</li>
         <li>Early access to new features</li>
       </ul>
-      <a class="pricing-btn pricing-btn-fill" href="https://buy.stripe.com/test_8x228q8vC8td1k8fnReEo00" target="_blank">Subscribe Monthly — $19/mo</a>
+      <a class="pricing-btn pricing-btn-fill" id="stripe-monthly" href="https://buy.stripe.com/test_8x228q8vC8td1k8fnReEo00" target="_blank">Get Morpheus — $19/mo</a>
+      <p style="text-align:center;margin-top:0.5rem;font-size:0.8rem;">
+        <a id="stripe-annual" href="#" style="color:var(--muted);text-decoration:underline;" target="_blank">or $15/mo billed annually</a>
+      </p>
     </div>
   </div>
+  <p style="text-align:center;color:var(--muted);font-size:0.85rem;margin-top:1.5rem;">
+    <strong>Team tier</strong> coming soon. <a href="#early-access" style="color:var(--accent-light);">Join the waitlist</a> and tag "team-interest".
+  </p>
 </section>
 
 <section class="bottom-cta" id="early-access" style="margin-top:3rem;">
@@ -439,7 +468,13 @@
 </section>
 
 <footer>
-  <p>© 2025 Morpheus. Built with ❤️ for the OpenClaw community. &nbsp;·&nbsp; <a href="https://openclaw.ai" target="_blank">OpenClaw</a></p>
+  <p>© 2026 Morpheus. Built with ❤️ for the OpenClaw community.</p>
+  <p style="margin-top:0.5rem;">
+    <a href="#">Docs</a> &nbsp;·&nbsp;
+    <a href="https://github.com/neoagentops-glitch/morpheus-landing" target="_blank">GitHub</a> &nbsp;·&nbsp;
+    <a href="https://discord.com/invite/clawd" target="_blank">Discord</a> &nbsp;·&nbsp;
+    <a href="https://x.com/NeoAgentOps" target="_blank">@NeoAgentOps</a>
+  </p>
 </footer>
 
 <script>
