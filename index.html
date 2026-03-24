@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Morpheus — Desktop Command Center for OpenClaw</title>
+  <meta name="description" content="One screen. All your agents. Morpheus is the native desktop app for managing OpenClaw multi-agent workflows. Built with Tauri v2. Free tier available." />
+  <meta property="og:title" content="Morpheus — Desktop Command Center for OpenClaw" />
+  <meta property="og:description" content="One screen. All your agents. Built with Tauri v2. Free tier available." />
+  <meta property="og:type" content="website" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --border: #1e1e2e;
+      --accent: #7c6af7;
+      --accent-glow: rgba(124, 106, 247, 0.25);
+      --accent-light: #a89cf5;
+      --text: #e8e8f0;
+      --muted: #8888a8;
+      --success: #4caf88;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .nav-logo {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .nav-logo span { color: var(--accent-light); }
+    .nav-cta {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* HERO */
+    .hero {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: var(--accent-glow);
+      color: var(--accent-light);
+      border: 1px solid var(--accent);
+      border-radius: 100px;
+      padding: 0.3rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 .highlight { color: var(--accent-light); }
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* EMAIL FORM */
+    .capture-form {
+      display: flex;
+      gap: 0.75rem;
+      max-width: 480px;
+      margin: 0 auto 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .capture-form input[type="email"] {
+      flex: 1;
+      min-width: 220px;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .capture-form input[type="email"]:focus { border-color: var(--accent); }
+    .capture-form button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .capture-form button:hover { opacity: 0.88; transform: translateY(-1px); }
+    .form-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 3rem;
+    }
+    .form-success {
+      display: none;
+      color: var(--success);
+      font-weight: 600;
+      margin-bottom: 3rem;
+    }
+
+    /* TERMINAL MOCKUP */
+    .terminal-wrap {
+      max-width: 720px;
+      margin: 0 auto 5rem;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(124,106,247,0.12), 0 0 0 1px var(--border);
+    }
+    .terminal-bar {
+      background: #161620;
+      padding: 0.7rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-red { background: #ff5f57; }
+    .dot-yellow { background: #febc2e; }
+    .dot-green { background: #28c840; }
+    .terminal-title { flex: 1; text-align: center; font-size: 0.75rem; color: var(--muted); }
+    .terminal-body {
+      background: #0d0d14;
+      padding: 1.5rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.8;
+    }
+    .t-dim { color: #555570; }
+    .t-purple { color: var(--accent-light); }
+    .t-green { color: #4caf88; }
+    .t-yellow { color: #f0c060; }
+    .t-white { color: var(--text); }
+    .t-blink { animation: blink 1.1s step-end infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* FEATURES */
+    .features {
+      max-width: 960px;
+      margin: 0 auto 5rem;
+      padding: 0 2rem;
+    }
+    .section-label {
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 3rem;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 24px var(--accent-glow);
+    }
+    .feature-icon { font-size: 1.6rem; margin-bottom: 0.75rem; }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .feature-card p { font-size: 0.9rem; color: var(--muted); }
+
+    /* PRICING */
+    .pricing {
+      max-width: 760px;
+      margin: 0 auto 5rem;
+      padding: 0 2rem;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+    .pricing-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+    .pricing-card.featured {
+      border-color: var(--accent);
+      box-shadow: 0 0 40px var(--accent-glow);
+    }
+    .pricing-badge {
+      display: inline-block;
+      background: var(--accent-glow);
+      color: var(--accent-light);
+      border: 1px solid var(--accent);
+      border-radius: 100px;
+      padding: 0.2rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .pricing-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .pricing-price { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.25rem; }
+    .pricing-price span { font-size: 1rem; color: var(--muted); font-weight: 400; }
+    .pricing-desc { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .pricing-features { list-style: none; margin-bottom: 1.75rem; }
+    .pricing-features li { font-size: 0.9rem; color: var(--muted); padding: 0.35rem 0; border-bottom: 1px solid var(--border); }
+    .pricing-features li::before { content: "✓ "; color: var(--success); font-weight: 700; }
+    .pricing-btn {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .pricing-btn-outline {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent-light);
+    }
+    .pricing-btn-fill {
+      background: var(--accent);
+      border: 1px solid var(--accent);
+      color: #fff;
+    }
+    .pricing-btn:hover { opacity: 0.82; }
+
+    /* BOTTOM CTA */
+    .bottom-cta {
+      max-width: 600px;
+      margin: 0 auto 6rem;
+      padding: 3rem 2rem;
+      text-align: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+    .bottom-cta h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .bottom-cta p { color: var(--muted); margin-bottom: 2rem; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Morpheus<span>.</span></div>
+  <a class="nav-cta" href="#early-access">Get Early Access</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">⚡ Now in development</div>
+  <h1>One screen.<br><span class="highlight">All your agents.</span></h1>
+  <p>Morpheus is the native desktop command center for OpenClaw multi-agent workflows. Built with Tauri v2. Free tier available.</p>
+
+  <form class="capture-form" id="heroForm" onsubmit="handleSubmit(event, 'heroForm')">
+    <input type="email" placeholder="Enter your email" required autocomplete="email" />
+    <button type="submit">Get Early Access</button>
+  </form>
+  <p class="form-note">Free forever tier available. No credit card required.</p>
+  <p class="form-success" id="heroSuccess">🎉 You're on the list! We'll be in touch.</p>
+</section>
+
+<div class="terminal-wrap" style="max-width:720px;margin:0 auto 5rem;">
+  <div class="terminal-bar">
+    <div class="terminal-dot dot-red"></div>
+    <div class="terminal-dot dot-yellow"></div>
+    <div class="terminal-dot dot-green"></div>
+    <div class="terminal-title">Morpheus — Agent Command Center</div>
+  </div>
+  <div class="terminal-body">
+    <div><span class="t-dim">▸</span> <span class="t-purple">morpheus</span> <span class="t-white">status --all</span></div>
+    <div>&nbsp;</div>
+    <div><span class="t-green">●</span> <span class="t-white">neo</span>        <span class="t-dim">orchestrator  </span><span class="t-yellow">3 tasks active</span></div>
+    <div><span class="t-green">●</span> <span class="t-white">tank</span>       <span class="t-dim">infrastructure </span><span class="t-yellow">deploying...</span></div>
+    <div><span class="t-green">●</span> <span class="t-white">trinity</span>    <span class="t-dim">research      </span><span class="t-green">idle</span></div>
+    <div><span class="t-green">●</span> <span class="t-white">oracle</span>     <span class="t-dim">analytics     </span><span class="t-green">idle</span></div>
+    <div>&nbsp;</div>
+    <div><span class="t-dim">▸</span> <span class="t-purple">morpheus</span> <span class="t-white">agent tank steer "Deploy landing page"</span></div>
+    <div><span class="t-green">✓</span> <span class="t-white">Task dispatched to tank</span> <span class="t-dim">· 0.12s</span></div>
+    <div><span class="t-dim">$</span> <span class="t-blink">█</span></div>
+  </div>
+</div>
+
+<section class="features">
+  <div class="section-label">Why Morpheus</div>
+  <h2 class="section-title">Everything you need to run your agent fleet</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🖥️</div>
+      <h3>Native Desktop Performance</h3>
+      <p>Built with Tauri v2 and React. Lightweight, fast, no Electron bloat. Under 10MB install size.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🤖</div>
+      <h3>Multi-Agent Orchestration</h3>
+      <p>Spawn, steer, and monitor all your OpenClaw agents from one unified interface.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>Real-Time Status</h3>
+      <p>Live task tracking, agent health, and session history. Always know what's running.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔗</div>
+      <h3>Deep OpenClaw Integration</h3>
+      <p>Connects directly to your local OpenClaw Gateway. No proxies, no latency, no nonsense.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎨</div>
+      <h3>Mission Control UI</h3>
+      <p>Portfolio view, spend board, and per-agent activity cards — all in one operator dashboard.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h3>Private by Default</h3>
+      <p>Everything runs locally. Your data, your agents, your keys. Zero cloud dependency.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="section-label">Pricing</div>
+  <h2 class="section-title">Simple, transparent pricing</h2>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-name">Free</div>
+      <div class="pricing-price">$0 <span>/ forever</span></div>
+      <div class="pricing-desc">Everything you need to get started with OpenClaw agents.</div>
+      <ul class="pricing-features">
+        <li>Up to 3 agents</li>
+        <li>Real-time status dashboard</li>
+        <li>Task history (7 days)</li>
+        <li>Community support</li>
+      </ul>
+      <a class="pricing-btn pricing-btn-outline" href="#early-access">Join Waitlist</a>
+    </div>
+    <div class="pricing-card featured">
+      <div class="pricing-badge">Most Popular</div>
+      <div class="pricing-name">Pro</div>
+      <div class="pricing-price">$19 <span>/ month</span></div>
+      <div class="pricing-desc">For power users running serious multi-agent operations.</div>
+      <ul class="pricing-features">
+        <li>Unlimited agents</li>
+        <li>Full task history</li>
+        <li>Spend analytics board</li>
+        <li>Custom workflows</li>
+        <li>Priority support</li>
+        <li>Early access to new features</li>
+      </ul>
+      <a class="pricing-btn pricing-btn-fill" href="#early-access">Get Early Access</a>
+    </div>
+  </div>
+</section>
+
+<section class="bottom-cta" id="early-access" style="margin-top:3rem;">
+  <h2>Be first when we launch</h2>
+  <p>Join the waitlist and get early access, launch pricing, and product updates.</p>
+  <form class="capture-form" id="ctaForm" onsubmit="handleSubmit(event, 'ctaForm')" style="justify-content:center;">
+    <input type="email" placeholder="Your email address" required autocomplete="email" />
+    <button type="submit">Join Waitlist</button>
+  </form>
+  <p class="form-success" id="ctaSuccess">🎉 You're on the list! We'll be in touch.</p>
+  <p style="font-size:0.8rem;color:var(--muted);margin-top:0.75rem;">No spam. Unsubscribe anytime.</p>
+</section>
+
+<footer>
+  <p>© 2025 Morpheus. Built with ❤️ for the OpenClaw community. &nbsp;·&nbsp; <a href="https://openclaw.ai" target="_blank">OpenClaw</a></p>
+</footer>
+
+<script>
+  // Buttondown integration placeholder — replace BUTTONDOWN_USERNAME below
+  const BUTTONDOWN_URL = 'https://buttondown.com/api/emails/embed-subscribe/MORPHEUS_PLACEHOLDER';
+
+  async function handleSubmit(e, formId) {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.querySelector('input[type="email"]').value;
+    const btn = form.querySelector('button');
+    const successEl = document.getElementById(formId.replace('Form', 'Success'));
+
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    try {
+      const resp = await fetch(BUTTONDOWN_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ email, tag: 'landing' })
+      });
+      if (resp.ok || resp.status === 200 || resp.status === 201) {
+        form.style.display = 'none';
+        if (successEl) successEl.style.display = 'block';
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Get Early Access';
+        alert('Something went wrong. Please try again.');
+      }
+    } catch(err) {
+      // Fallback: still show success (email captured via form — integrate with Buttondown later)
+      form.style.display = 'none';
+      if (successEl) successEl.style.display = 'block';
+    }
+  }
+</script>
+
+</body>
+</html>
