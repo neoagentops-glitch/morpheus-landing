@@ -2,611 +2,999 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Construct — Desktop Command Center for OpenClaw</title>
-  <meta name="description" content="One screen. All your agents. The Construct is the native desktop app for managing OpenClaw multi-agent workflows. Built with Tauri v2. Free tier available." />
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <!-- Open Graph -->
-  <meta property="og:title" content="The Construct — Desktop Command Center for OpenClaw" />
-  <meta property="og:description" content="One screen. All your agents. Built with Tauri v2. Free tier available." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Construct — One screen. All your agents.</title>
+  <meta name="description" content="The Construct is the orchestration layer for OpenClaw. One screen for your agents, sessions, projects, and approvals — built for people running multiple agents across multiple projects." />
+  <meta property="og:title" content="The Construct — One screen. All your agents." />
+  <meta property="og:description" content="Your agents already run on OpenClaw. The Construct gives you the cockpit." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://theconstructapp.com" />
   <meta property="og:image" content="https://theconstructapp.com/og-image.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="The Construct — Desktop Command Center for OpenClaw" />
-  <meta name="twitter:description" content="One screen. All your agents. Built with Tauri v2. Free tier available." />
-  <meta name="twitter:image" content="https://theconstructapp.com/og-image.png" />
-  <meta name="twitter:site" content="@NeoAgentOps" />
-  <!-- Plausible Analytics -->
-  <script defer data-domain="theconstructapp.com" src="https://plausible.io/js/script.js"></script>
-  <!-- Plus Jakarta Sans -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <meta name="twitter:title" content="The Construct — One screen. All your agents." />
+  <meta name="twitter:description" content="The orchestration layer for OpenClaw multi-agent workflows." />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #fafaf8;
-      --surface: #ffffff;
-      --surface-alt: #f5f3ef;
-      --border: #e8e5df;
-      --accent: #1a1a1a;
-      --accent-soft: #2d2d2d;
-      --accent-hover: #000000;
-      --primary: #6366f1;
-      --primary-light: #818cf8;
-      --primary-glow: rgba(99, 102, 241, 0.12);
-      --text: #1a1a1a;
-      --text-secondary: #6b6b6b;
-      --text-muted: #9a9a9a;
-      --success: #22c55e;
-      --radius: 12px;
-      --radius-lg: 20px;
+      --cream: #fcfbf9;
+      --paper: #f5f1ea;
+      --ink: #151525;
+      --hero: #1a1a2e;
+      --hero-2: #22223a;
+      --text: #fcfbf9;
+      --muted: rgba(252, 251, 249, 0.72);
+      --dark-text: #1a1a2e;
+      --dark-muted: #5f6175;
+      --line: rgba(252, 251, 249, 0.12);
+      --line-light: rgba(26, 26, 46, 0.1);
+      --accent: #d2b48c;
+      --accent-2: #f3dfc1;
+      --success: #95d5b2;
+      --shadow: 0 24px 60px rgba(0,0,0,0.26);
+      --radius: 22px;
+      --radius-sm: 14px;
+      --max: 1180px;
     }
 
+    * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      line-height: 1.65;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--cream);
+      color: var(--dark-text);
+      line-height: 1.55;
     }
 
-    /* NAV */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      max-width: 1120px;
+    a { color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    .wrap {
+      width: min(var(--max), calc(100% - 32px));
       margin: 0 auto;
     }
-    .nav-brand {
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      background: rgba(26, 26, 46, 0.78);
+      border-bottom: 1px solid rgba(252,251,249,0.08);
+    }
+
+    .nav {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      font-size: 1.15rem;
-      font-weight: 800;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 0;
+    }
+
+    .brand {
+      font-weight: 700;
       letter-spacing: -0.03em;
       color: var(--text);
       text-decoration: none;
+      font-size: 1rem;
     }
-    .nav-glasses { display: block; filter: brightness(0); opacity: 0.85; }
-    .nav-links { display: flex; align-items: center; gap: 2rem; }
-    .nav-links a {
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .nav-links a:hover { color: var(--text); }
-    .nav-cta {
-      background: var(--accent);
-      color: #fff;
-      padding: 0.55rem 1.25rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.15s;
-    }
-    .nav-cta:hover { background: var(--accent-hover); }
 
-    /* HERO */
-    .hero {
-      max-width: 780px;
-      margin: 0 auto;
-      padding: 5rem 2rem 3rem;
-      text-align: center;
+    .nav-links {
+      display: none;
+      gap: 20px;
+      align-items: center;
     }
-    .hero-badge {
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      background: var(--primary-glow);
-      color: var(--primary);
-      border: 1px solid rgba(99, 102, 241, 0.2);
-      border-radius: 100px;
-      padding: 0.35rem 1rem;
-      font-size: 0.78rem;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      text-decoration: none;
       font-weight: 600;
-      letter-spacing: 0.02em;
-      margin-bottom: 1.75rem;
-    }
-    .hero h1 {
-      font-size: clamp(2.6rem, 6vw, 3.8rem);
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      line-height: 1.08;
-      margin-bottom: 1.25rem;
-      color: var(--text);
-    }
-    .hero .subtitle {
-      font-size: 1.15rem;
-      color: var(--text-secondary);
-      max-width: 520px;
-      margin: 0 auto 2.5rem;
-      line-height: 1.6;
+      transition: transform .18s ease, opacity .18s ease, border-color .18s ease, background .18s ease;
+      cursor: pointer;
+      font-size: 0.96rem;
     }
 
-    /* EMAIL FORM */
-    .capture-form {
-      display: flex;
-      gap: 0.6rem;
-      max-width: 440px;
-      margin: 0 auto 0.75rem;
-      flex-wrap: wrap;
-      justify-content: center;
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--accent-2);
+      color: var(--ink);
     }
-    .capture-form input[type="email"] {
-      flex: 1;
-      min-width: 200px;
-      padding: 0.7rem 1rem;
-      border-radius: 10px;
-      border: 1.5px solid var(--border);
-      background: var(--surface);
+    .btn-secondary {
+      background: transparent;
+      border-color: rgba(252,251,249,0.18);
       color: var(--text);
-      font-family: inherit;
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .capture-form input[type="email"]:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-glow);
+    .btn-light {
+      background: var(--hero);
+      color: var(--text);
     }
-    .capture-form button {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 0.7rem 1.5rem;
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 0.9rem;
+
+    .hero {
+      background: radial-gradient(circle at top right, rgba(210,180,140,0.18), transparent 28%), linear-gradient(180deg, var(--hero), #151522 100%);
+      color: var(--text);
+      padding: 56px 0 72px;
+    }
+
+    .hero-grid {
+      display: grid;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .eyebrow-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-size: 0.84rem;
+      border: 1px solid rgba(252,251,249,0.14);
+      color: var(--text);
+      background: rgba(252,251,249,0.06);
+    }
+
+    .pill-built {
+      background: rgba(149,213,178,0.14);
+      border-color: rgba(149,213,178,0.35);
+      color: #d8f3dc;
+      font-weight: 600;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.7rem, 9vw, 5rem);
+      line-height: 0.96;
+      letter-spacing: -0.06em;
+    }
+
+    .hero-copy p {
+      font-size: clamp(1.06rem, 2.8vw, 1.28rem);
+      color: var(--muted);
+      max-width: 720px;
+      margin: 18px 0 0;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .hero-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .hero-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid rgba(252,251,249,0.12);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .app-shell {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(252,251,249,0.1);
+      background: #12121d;
+    }
+
+    .app-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(252,251,249,0.08);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .traffic {
+      display: flex;
+      gap: 7px;
+    }
+    .traffic span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: block;
+      background: rgba(252,251,249,0.2);
+    }
+    .traffic span:nth-child(1) { background: #ff6b6b; }
+    .traffic span:nth-child(2) { background: #ffd166; }
+    .traffic span:nth-child(3) { background: #95d5b2; }
+
+    .app-title {
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .shell-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+      padding: 16px;
+      border-bottom: 1px solid rgba(252,251,249,0.08);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .sidebar h3,
+    .main-panel h3 {
+      margin: 0 0 12px;
+      font-size: 0.84rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(252,251,249,0.58);
+    }
+
+    .lane-list,
+    .plan-list,
+    .metric-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .lane-item,
+    .plan-item,
+    .metric,
+    .screenshot-card,
+    .faq-item,
+    .price-card,
+    .feature-card,
+    .quote-box {
+      border-radius: 16px;
+    }
+
+    .lane-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 14px;
+      background: rgba(252,251,249,0.04);
+      border: 1px solid rgba(252,251,249,0.08);
+      color: var(--text);
+    }
+
+    .lane-item small {
+      display: block;
+      color: rgba(252,251,249,0.6);
+      margin-top: 3px;
+      font-size: 0.8rem;
+    }
+
+    .lane-badge {
+      border-radius: 999px;
+      padding: 6px 9px;
+      font-size: 0.72rem;
+      color: #10101a;
+      background: var(--accent-2);
       font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
       white-space: nowrap;
     }
-    .capture-form button:hover { background: var(--accent-hover); transform: translateY(-1px); }
-    .form-note {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      margin-bottom: 3rem;
+
+    .main-panel {
+      padding: 16px;
     }
-    .form-success {
-      display: none;
-      color: var(--success);
-      font-weight: 600;
+
+    .metric-list {
+      grid-template-columns: repeat(2, 1fr);
+      margin-bottom: 14px;
+    }
+
+    .metric {
+      padding: 12px 14px;
+      background: rgba(252,251,249,0.04);
+      border: 1px solid rgba(252,251,249,0.08);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.3rem;
+      margin-bottom: 3px;
+      letter-spacing: -0.04em;
+    }
+
+    .metric span {
+      color: rgba(252,251,249,0.6);
+      font-size: 0.84rem;
+    }
+
+    .plan-item {
+      padding: 14px;
+      background: rgba(252,251,249,0.04);
+      border: 1px solid rgba(252,251,249,0.08);
+    }
+
+    .plan-item strong {
+      display: block;
+      margin-bottom: 4px;
       font-size: 0.95rem;
-      margin-bottom: 2rem;
     }
 
-    /* TERMINAL */
-    .terminal-wrap {
-      max-width: 680px;
-      margin: 0 auto 5rem;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      overflow: hidden;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    .plan-item span {
+      color: rgba(252,251,249,0.62);
+      font-size: 0.86rem;
     }
-    .terminal-bar {
-      background: #f8f7f5;
-      padding: 0.65rem 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .terminal-dot { width: 11px; height: 11px; border-radius: 50%; }
-    .dot-red { background: #ff5f57; }
-    .dot-yellow { background: #febc2e; }
-    .dot-green { background: #28c840; }
-    .terminal-title { flex: 1; text-align: center; font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
-    .terminal-body {
-      background: #1e1e2e;
-      padding: 1.5rem;
-      font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-      line-height: 1.85;
-    }
-    .t-dim { color: #555570; }
-    .t-purple { color: #a89cf5; }
-    .t-green { color: #4caf88; }
-    .t-yellow { color: #f0c060; }
-    .t-white { color: #e8e8f0; }
-    .t-blink { animation: blink 1.1s step-end infinite; }
-    @keyframes blink { 50% { opacity: 0; } }
 
-    /* SECTION SHARED */
-    .section {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 0 2rem 5rem;
+    section.block {
+      padding: 72px 0;
     }
-    .section-label {
-      text-align: center;
-      font-size: 0.75rem;
-      font-weight: 700;
+
+    section.block.dark {
+      background: var(--hero);
+      color: var(--text);
+    }
+
+    section.block.light {
+      background: var(--cream);
+      color: var(--dark-text);
+    }
+
+    .section-head {
+      margin-bottom: 26px;
+      max-width: 760px;
+    }
+
+    .section-head .kicker {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--primary);
-      margin-bottom: 0.75rem;
-    }
-    .section-title {
-      text-align: center;
-      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      margin-bottom: 3rem;
-      color: var(--text);
+      color: inherit;
+      opacity: 0.66;
+      font-weight: 700;
     }
 
-    /* FEATURES */
-    .features-grid {
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: -0.05em;
+      line-height: 1.02;
+    }
+
+    .section-head p {
+      margin: 14px 0 0;
+      font-size: 1.05rem;
+      color: inherit;
+      opacity: 0.78;
+      max-width: 740px;
+    }
+
+    .feature-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1rem;
+      gap: 16px;
     }
-    .feature-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .feature-card:hover {
-      border-color: #d0cdc6;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-    }
-    .feature-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      margin-bottom: 0.85rem;
-      background: var(--surface-alt);
-    }
-    .feature-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.35rem; }
-    .feature-card p { font-size: 0.87rem; color: var(--text-secondary); line-height: 1.55; }
 
-    /* PRICING */
+    .feature-card {
+      padding: 20px;
+      border: 1px solid var(--line-light);
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    }
+
+    .dark .feature-card {
+      background: rgba(252,251,249,0.04);
+      border-color: var(--line);
+      box-shadow: none;
+    }
+
+    .feature-card .tag {
+      display: inline-flex;
+      margin-bottom: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.77rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(210,180,140,0.16);
+      color: inherit;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.22rem;
+      letter-spacing: -0.03em;
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: inherit;
+      opacity: 0.8;
+    }
+
+    .screenshot-grid {
+      display: grid;
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .screenshot-card {
+      padding: 18px;
+      border: 1px dashed rgba(252,251,249,0.25);
+      background: rgba(252,251,249,0.04);
+      min-height: 220px;
+      display: grid;
+      align-content: space-between;
+      gap: 18px;
+    }
+
+    .light .screenshot-card {
+      border-color: rgba(26,26,46,0.15);
+      background: #fff;
+    }
+
+    .shot-box {
+      aspect-ratio: 16 / 10;
+      border-radius: 14px;
+      border: 1px dashed currentColor;
+      opacity: 0.5;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.86rem;
+    }
+
+    .quote-box {
+      padding: 22px;
+      background: linear-gradient(180deg, rgba(243,223,193,0.34), rgba(243,223,193,0.14));
+      border: 1px solid rgba(210,180,140,0.28);
+      color: var(--ink);
+      margin-top: 28px;
+    }
+
+    .quote-box p {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+
+    .quote-box strong { display: block; margin-bottom: 8px; }
+
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.25rem;
-      max-width: 760px;
-      margin: 0 auto;
+      gap: 18px;
+      margin-top: 28px;
     }
-    .pricing-card {
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 2rem;
+
+    .price-card {
+      background: #fff;
+      border: 1px solid var(--line-light);
+      padding: 24px 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      position: relative;
+      overflow: hidden;
     }
-    .pricing-card.featured {
-      border-color: var(--accent);
-      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+
+    .price-card.featured {
+      border-color: rgba(26,26,46,0.26);
+      transform: none;
     }
-    .pricing-badge {
-      display: inline-block;
-      background: var(--accent);
-      color: #fff;
-      border-radius: 100px;
-      padding: 0.2rem 0.75rem;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      margin-bottom: 1rem;
+
+    .price-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
     }
-    .pricing-name { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; }
-    .pricing-price {
-      font-size: 2.6rem;
-      font-weight: 800;
+
+    .price-name {
+      margin: 0;
+      font-size: 1.4rem;
       letter-spacing: -0.04em;
-      margin-bottom: 0.2rem;
     }
-    .pricing-price span { font-size: 0.9rem; color: var(--text-muted); font-weight: 400; }
-    .pricing-desc { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem; }
-    .pricing-features { list-style: none; margin-bottom: 1.75rem; }
-    .pricing-features li {
-      font-size: 0.87rem;
-      color: var(--text-secondary);
-      padding: 0.4rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .pricing-features li::before { content: "✓  "; color: var(--success); font-weight: 700; }
-    .pricing-btn {
-      display: block;
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 10px;
-      text-align: center;
-      font-weight: 700;
-      font-family: inherit;
-      font-size: 0.9rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: opacity 0.15s, transform 0.1s;
-    }
-    .pricing-btn:hover { transform: translateY(-1px); }
-    .pricing-btn-outline {
-      background: transparent;
-      border: 1.5px solid var(--border);
-      color: var(--text);
-    }
-    .pricing-btn-outline:hover { border-color: var(--accent); }
-    .pricing-btn-fill {
-      background: var(--accent);
-      border: 1.5px solid var(--accent);
-      color: #fff;
-    }
-    .pricing-btn-fill:hover { opacity: 0.9; }
-    .pricing-annual {
-      text-align: center;
-      margin-top: 0.5rem;
-      font-size: 0.8rem;
-    }
-    .pricing-annual a { color: var(--text-muted); text-decoration: underline; }
-    .pricing-team {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      margin-top: 1.5rem;
-    }
-    .pricing-team a { color: var(--primary); text-decoration: none; font-weight: 600; }
-    .pricing-team a:hover { text-decoration: underline; }
 
-    /* BOTTOM CTA */
-    .bottom-cta {
-      max-width: 560px;
-      margin: 0 auto 5rem;
-      padding: 3rem 2rem;
-      text-align: center;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.03);
+    .price-copy {
+      color: var(--dark-muted);
+      margin: 8px 0 0;
+      font-size: 0.96rem;
     }
-    .bottom-cta h2 {
-      font-size: 1.6rem;
+
+    .price-amount {
+      font-size: 2.35rem;
       font-weight: 800;
+      letter-spacing: -0.06em;
+      line-height: 0.95;
+      text-align: right;
+    }
+
+    .price-amount span {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--dark-muted);
+      margin-top: 6px;
+    }
+
+    .featured-label {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--hero);
+      color: var(--text);
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .price-list {
+      list-style: none;
+      padding: 0;
+      margin: 18px 0 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .price-list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: var(--dark-text);
+    }
+
+    .price-list li::before {
+      content: "•";
+      color: #8d6e63;
+      font-weight: 900;
+      line-height: 1;
+      margin-top: 1px;
+    }
+
+    .faq-grid {
+      display: grid;
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .faq-item {
+      background: #fff;
+      border: 1px solid var(--line-light);
+      padding: 18px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.03);
+    }
+
+    .faq-item h3 {
+      margin: 0 0 8px;
+      font-size: 1.02rem;
       letter-spacing: -0.02em;
-      margin-bottom: 0.6rem;
     }
-    .bottom-cta p { color: var(--text-secondary); margin-bottom: 1.75rem; font-size: 0.95rem; }
 
-    /* FOOTER */
+    .faq-item p {
+      margin: 0;
+      color: var(--dark-muted);
+    }
+
+    .signup-shell {
+      background: linear-gradient(180deg, #211f38, #161624);
+      color: var(--text);
+      border-radius: 26px;
+      padding: 24px;
+      border: 1px solid rgba(252,251,249,0.1);
+      box-shadow: var(--shadow);
+    }
+
+    .signup-shell p {
+      color: var(--muted);
+      margin-top: 8px;
+      margin-bottom: 20px;
+    }
+
+    .signup-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .signup-form input {
+      width: 100%;
+      min-height: 50px;
+      border-radius: 14px;
+      border: 1px solid rgba(252,251,249,0.14);
+      background: rgba(252,251,249,0.08);
+      color: var(--text);
+      padding: 0 16px;
+      font-size: 1rem;
+    }
+
+    .signup-form input::placeholder { color: rgba(252,251,249,0.52); }
+
+    .micro {
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
     footer {
-      border-top: 1px solid var(--border);
-      padding: 2rem;
-      text-align: center;
-      font-size: 0.8rem;
-      color: var(--text-muted);
+      background: #11111a;
+      color: var(--muted);
+      padding: 42px 0 56px;
     }
-    footer a { color: var(--text-muted); text-decoration: none; transition: color 0.15s; }
-    footer a:hover { color: var(--text); }
-    .footer-links { margin-top: 0.6rem; }
-    .footer-links a { margin: 0 0.6rem; }
 
-    /* RESPONSIVE */
-    @media (max-width: 640px) {
-      nav { padding: 1rem 1.25rem; }
-      .nav-links a:not(.nav-cta) { display: none; }
-      .hero { padding: 3rem 1.25rem 2rem; }
-      .section { padding: 0 1.25rem 3.5rem; }
-      .capture-form { flex-direction: column; }
-      .capture-form input[type="email"],
-      .capture-form button { width: 100%; min-width: 0; }
-      .bottom-cta { margin: 0 1rem 3rem; }
+    .footer-grid {
+      display: grid;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .footer-brand {
+      display: grid;
+      gap: 14px;
+    }
+
+    .footer-brand img {
+      width: 120px;
+      max-width: 42vw;
+      border-radius: 14px;
+      background: #000;
+      padding: 8px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px 18px;
+    }
+
+    .footer-links a {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover { color: var(--accent-2); }
+
+    @media (min-width: 760px) {
+      .nav-links { display: flex; }
+      .hero { padding: 76px 0 94px; }
+      .hero-grid { grid-template-columns: 1.1fr 0.9fr; }
+      .shell-grid { grid-template-columns: 280px 1fr; }
+      .sidebar { border-right: 1px solid rgba(252,251,249,0.08); border-bottom: 0; }
+      .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .screenshot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .pricing-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
+      .pricing-grid .price-card.featured { transform: translateY(-8px); }
+      .faq-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .signup-form { grid-template-columns: 1.5fr auto; }
+      .footer-grid { grid-template-columns: 1.1fr auto; justify-content: space-between; }
+    }
+
+    @media (min-width: 980px) {
+      .feature-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .screenshot-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
   </style>
 </head>
 <body>
-
-<nav>
-  <a class="nav-brand" href="/">
-    <img src="/glasses-icon.svg" alt="" class="nav-glasses" width="34" height="15" />
-    Morpheus
-  </a>
-  <div class="nav-links">
-    <a href="#features">Features</a>
-    <a href="#pricing">Pricing</a>
-    <a class="nav-cta" href="#early-access">Get Early Access</a>
-  </div>
-</nav>
-
-<section class="hero">
-  <div class="hero-badge">✦ Now in development</div>
-  <h1>One screen.<br>All your agents.</h1>
-  <p class="subtitle">The Construct is the native desktop command center for OpenClaw multi-agent workflows. Fast, local, and free to start.</p>
-
-  <form class="capture-form" id="heroForm" onsubmit="handleSubmit(event, 'heroForm')">
-    <input type="email" name="email" placeholder="you@example.com" required autocomplete="email" />
-    <button type="submit">Get Early Access</button>
-  </form>
-  <p class="form-note">Free forever tier. No credit card required.</p>
-  <p class="form-success" id="heroSuccess">🎉 You're on the list — we'll be in touch.</p>
-</section>
-
-<div class="terminal-wrap">
-  <div class="terminal-bar">
-    <div class="terminal-dot dot-red"></div>
-    <div class="terminal-dot dot-yellow"></div>
-    <div class="terminal-dot dot-green"></div>
-    <div class="terminal-title">The Construct — Agent Command Center</div>
-  </div>
-  <div class="terminal-body">
-    <div><span class="t-dim">▸</span> <span class="t-purple">construct</span> <span class="t-white">status --all</span></div>
-    <div>&nbsp;</div>
-    <div><span class="t-green">●</span> <span class="t-white">neo</span>        <span class="t-dim">orchestrator  </span><span class="t-yellow">3 tasks</span></div>
-    <div><span class="t-green">●</span> <span class="t-white">tank</span>       <span class="t-dim">infrastructure </span><span class="t-yellow">deploying...</span></div>
-    <div><span class="t-green">●</span> <span class="t-white">trinity</span>    <span class="t-dim">research      </span><span class="t-green">idle</span></div>
-    <div><span class="t-green">●</span> <span class="t-white">oracle</span>     <span class="t-dim">analytics     </span><span class="t-green">idle</span></div>
-    <div>&nbsp;</div>
-    <div><span class="t-dim">▸</span> <span class="t-purple">construct</span> <span class="t-white">steer tank "Deploy landing page"</span></div>
-    <div><span class="t-green">✓</span> <span class="t-white">Dispatched to tank</span> <span class="t-dim">· 0.12s</span></div>
-    <div><span class="t-dim">$</span> <span class="t-blink">█</span></div>
-  </div>
-</div>
-
-<section class="section" id="features">
-  <div class="section-label">Why Morpheus</div>
-  <h2 class="section-title">Everything you need to run your agent fleet</h2>
-  <div class="features-grid">
-    <div class="feature-card">
-      <div class="feature-icon">🖥️</div>
-      <h3>Native Desktop Speed</h3>
-      <p>Built with Tauri v2 and React. Lightweight, fast, no Electron bloat. Under 10MB.</p>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="#top">The Construct</a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a class="btn btn-primary" href="#early-access">Get Early Access</a>
     </div>
-    <div class="feature-card">
-      <div class="feature-icon">🤖</div>
-      <h3>Multi-Agent Orchestration</h3>
-      <p>Spawn, steer, and monitor all your OpenClaw agents from one unified interface.</p>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow-row">
+            <span class="pill pill-built">Built for OpenClaw</span>
+            <span class="pill">Native desktop command center</span>
+          </div>
+          <h1>One screen.<br />All your agents.</h1>
+          <p>
+            The Construct is a native desktop app that gives you visual control over your OpenClaw agents. If you're running multiple agents across terminals and browser tabs, The Construct replaces that chaos with a single screen — every agent's status, session history, lane assignments, and project context in one place.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#early-access">Get Early Access</a>
+            <a class="btn btn-secondary" href="#pricing">See pricing</a>
+          </div>
+          <div class="hero-note">
+            Your agents already run on OpenClaw. The Construct gives you the cockpit.
+          </div>
+        </div>
+
+        <div class="hero-card" aria-label="Construct application preview">
+          <div class="app-shell">
+            <div class="app-topbar">
+              <div class="traffic"><span></span><span></span><span></span></div>
+              <div class="app-title">The Construct · orchestration view</div>
+              <div class="pill">Approval on</div>
+            </div>
+            <div class="shell-grid">
+              <aside class="sidebar">
+                <h3>5 lanes</h3>
+                <div class="lane-list">
+                  <div class="lane-item"><div><strong>SYSTEM</strong><small>Operator</small></div><span class="lane-badge">live</span></div>
+                  <div class="lane-item"><div><strong>BUILD</strong><small>Tank</small></div><span class="lane-badge">2 tasks</span></div>
+                  <div class="lane-item"><div><strong>CONTENT</strong><small>Link</small></div><span class="lane-badge">queued</span></div>
+                  <div class="lane-item"><div><strong>DESIGN</strong><small>Mouse</small></div><span class="lane-badge">drafting</span></div>
+                  <div class="lane-item"><div><strong>OPS</strong><small>Trinity</small></div><span class="lane-badge">clear</span></div>
+                </div>
+              </aside>
+              <section class="main-panel">
+                <h3>Plan ready for approval</h3>
+                <div class="metric-list">
+                  <div class="metric"><strong>5</strong><span>default agents</span></div>
+                  <div class="metric"><strong>2</strong><span>transports</span></div>
+                  <div class="metric"><strong>1</strong><span>shared cockpit</span></div>
+                  <div class="metric"><strong>∞</strong><span>session continuity</span></div>
+                </div>
+                <div class="plan-list">
+                  <div class="plan-item"><strong>Draft execution plan</strong><span>Invisible intelligence turns intent into a clear sequence before anything runs.</span></div>
+                  <div class="plan-item"><strong>Route by model name</strong><span>Claude goes through CLI. Everything else flows through the OpenClaw gateway.</span></div>
+                  <div class="plan-item"><strong>Dispatch with context</strong><span>Lane and project headers keep every agent aligned to the same mission.</span></div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block light" id="features">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">What it does</div>
+          <h2>Not a chat wrapper. An orchestration layer.</h2>
+          <p>
+            There are other desktop tools for OpenClaw. The Construct is for people running multiple agents across multiple projects who need orchestration, not just a dashboard.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="tag">Dashboard</div>
+            <h3>See the whole system at once</h3>
+            <p>One command center for agent status, lane assignments, active threads, project context, and what’s running now. No tab juggling. No terminal archaeology.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="tag">Session Persistence</div>
+            <h3>Resume where you left off</h3>
+            <p>Sessions persist in SQLite, so your thread history, metadata, and context stay intact. If the app closes, your operating picture doesn’t disappear with it.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="tag">5-lane framework</div>
+            <h3>Structure that keeps agents coherent</h3>
+            <p>SYSTEM, BUILD, CONTENT, DESIGN, and OPS — with Operator, Tank, Link, Mouse, and Trinity as the default lineup. Every message lands in the right lane with the right project header.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="tag">Orchestration</div>
+            <h3>The differentiator</h3>
+            <p>Describe what you need. The system drafts a plan — which agents, what order, what dependencies — and you approve before execution. You stay in control without doing the coordination manually.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="tag">Dual transport</div>
+            <h3>Claude CLI + OpenClaw gateway</h3>
+            <p>The transport layer auto-routes by model name. Claude models go through CLI. Non-Claude models route through the OpenClaw gateway. Same cockpit. Same flow.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="tag">Mobile access</div>
+            <h3>Check in without sitting at the desk</h3>
+            <p>Use Tailscale + PWA access to check on running work, review the system state, and stay close to your agent fleet from your phone when you’re away.</p>
+          </article>
+        </div>
+
+        <div class="quote-box">
+          <strong>Positioning</strong>
+          <p>OpenClaw changed how you work with agents. The Construct changes how you manage them.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block dark">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">Screenshot placeholders</div>
+          <h2>Leave space for proof.</h2>
+          <p>Real app screenshots go here later. For now the layout holds their place so the page is deployable immediately and ready for the next pass.</p>
+        </div>
+
+        <div class="screenshot-grid">
+          <article class="screenshot-card">
+            <div class="shot-box">[SCREENSHOT]</div>
+            <div>
+              <strong>Hero shot</strong>
+              <p>Full Construct window showing the multi-agent dashboard with 5 agents, status indicators, and lane labels.</p>
+            </div>
+          </article>
+          <article class="screenshot-card">
+            <div class="shot-box">[SCREENSHOT]</div>
+            <div>
+              <strong>Orchestration view</strong>
+              <p>Drafted execution plan with task cards, agent assignments, and approval actions — the real differentiator shot.</p>
+            </div>
+          </article>
+          <article class="screenshot-card">
+            <div class="shot-box">[SCREENSHOT]</div>
+            <div>
+              <strong>Mobile view</strong>
+              <p>PWA check-in on a phone via Tailscale, showing that the cockpit is still usable when you’re not at the Mac mini.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block light" id="pricing">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">Pricing</div>
+          <h2>Simple tiers. Real capability jumps.</h2>
+          <p>The Construct is the orchestration layer on top of OpenClaw. You bring your own model access. Pricing is for the cockpit, persistence, and orchestration layer — not a second tax on tokens.</p>
+        </div>
+
+        <div class="pricing-grid">
+          <article class="price-card">
+            <div class="price-top">
+              <div>
+                <h3 class="price-name">Blue Pill</h3>
+                <p class="price-copy">Get started with a single agent. No account required.</p>
+              </div>
+              <div class="price-amount">$0<span>Free</span></div>
+            </div>
+            <ul class="price-list">
+              <li>One agent</li>
+              <li>10 stored sessions</li>
+              <li>Basic session management</li>
+              <li>Single lane only</li>
+              <li>No mobile access</li>
+              <li>Community support</li>
+            </ul>
+          </article>
+
+          <article class="price-card featured">
+            <div class="featured-label">Recommended</div>
+            <div class="price-top">
+              <div>
+                <h3 class="price-name">Red Pill</h3>
+                <p class="price-copy">Full multi-agent orchestration. $15/mo billed annually.</p>
+              </div>
+              <div class="price-amount">$19<span>/ month</span></div>
+            </div>
+            <ul class="price-list">
+              <li>Unlimited agents</li>
+              <li>Unlimited session history</li>
+              <li>All 5 lanes: SYSTEM, BUILD, CONTENT, DESIGN, OPS</li>
+              <li>Orchestration with approval gates</li>
+              <li>Mobile access</li>
+              <li>Personality system</li>
+              <li>Claude CLI + OpenClaw gateway</li>
+              <li>Priority support</li>
+            </ul>
+          </article>
+
+          <article class="price-card">
+            <div class="price-top">
+              <div>
+                <h3 class="price-name">Zion</h3>
+                <p class="price-copy">For teams running shared agent fleets. Coming soon.</p>
+              </div>
+              <div class="price-amount">Contact<span>Team</span></div>
+            </div>
+            <ul class="price-list">
+              <li>Everything in Red Pill</li>
+              <li>Shared configurations</li>
+              <li>Team visibility</li>
+              <li>Admin controls</li>
+              <li>Centralized billing</li>
+              <li>Dedicated support</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block light" id="faq">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">FAQ</div>
+          <h2>What people need to know before they jump in.</h2>
+        </div>
+
+        <div class="faq-grid">
+          <article class="faq-item">
+            <h3>Do I need my own OpenClaw setup?</h3>
+            <p>Yes. The Construct connects to your existing OpenClaw gateway. It doesn’t include LLM access — you bring your own Claude Max subscription, API keys, or other model providers.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Can I use The Construct with non-Claude models?</h3>
+            <p>Yes. Claude models route through the CLI binary. Non-Claude models route through the OpenClaw gateway. Both work seamlessly.</p>
+          </article>
+          <article class="faq-item">
+            <h3>What happens when my free sessions fill up?</h3>
+            <p>Your oldest sessions are archived, not deleted. You can upgrade to Red Pill for unlimited history, or manually clear sessions to free up space.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Can I cancel anytime?</h3>
+            <p>Yes. No contracts. Cancel from your account and you’ll revert to Blue Pill at the end of your billing period. Your session data stays — nothing is deleted.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Is there a student or open-source discount?</h3>
+            <p>Email us. We’re happy to work something out for students and active open-source contributors.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block dark" id="early-access">
+      <div class="wrap">
+        <div class="signup-shell">
+          <div class="section-head" style="margin-bottom:18px; max-width:none;">
+            <div class="kicker">Early access</div>
+            <h2>Get early access to The Construct.</h2>
+            <p>Buttondown embed placeholder for now. Hook the form action to the final list later — the structure is already in place.</p>
+          </div>
+
+          <form class="signup-form" action="#" method="post" onsubmit="event.preventDefault(); this.classList.add('submitted');">
+            <input type="email" name="email" placeholder="Enter your email" aria-label="Email address" required />
+            <button class="btn btn-primary" type="submit">Get Early Access</button>
+          </form>
+          <p class="micro">No spam. Just launch updates, early access, and the occasional field note from the build.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-grid">
+      <div class="footer-brand">
+        <img src="./r3-chair-mark.png" alt="R3 chair mark" />
+        <div>
+          <strong style="display:block; color:#fcfbf9; margin-bottom:8px;">The Construct</strong>
+          <span>Your agents already run on OpenClaw. The Construct gives you the cockpit.</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer-links">
+          <a href="https://theconstructapp.com">theconstructapp.com</a>
+          <a href="https://openclaw.ai">OpenClaw</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#faq">FAQ</a>
+          <a href="#early-access">Early Access</a>
+        </div>
+      </div>
     </div>
-    <div class="feature-card">
-      <div class="feature-icon">⚡</div>
-      <h3>Real-Time Status</h3>
-      <p>Live task tracking, agent health, and session history. Always know what's running.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🔗</div>
-      <h3>Deep Integration</h3>
-      <p>Connects directly to your local OpenClaw Gateway. No proxies, no latency.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🎨</div>
-      <h3>Mission Control UI</h3>
-      <p>Portfolio view, spend board, and per-agent activity cards in one dashboard.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🔒</div>
-      <h3>Private by Default</h3>
-      <p>Everything runs locally. Your data, your agents, your keys. Zero cloud dependency.</p>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="pricing">
-  <div class="section-label">Pricing</div>
-  <h2 class="section-title">Simple, transparent pricing</h2>
-  <div class="pricing-grid">
-    <div class="pricing-card">
-      <div class="pricing-name">Free</div>
-      <div class="pricing-price">$0 <span>/ forever</span></div>
-      <div class="pricing-desc">Everything you need to get started with OpenClaw agents.</div>
-      <ul class="pricing-features">
-        <li>Up to 3 agents</li>
-        <li>Real-time status dashboard</li>
-        <li>Task history (7 days)</li>
-        <li>Community support</li>
-      </ul>
-      <a class="pricing-btn pricing-btn-outline" href="#early-access">Get Early Access</a>
-    </div>
-    <div class="pricing-card featured">
-      <div class="pricing-badge">Most Popular</div>
-      <div class="pricing-name">Pro</div>
-      <div class="pricing-price">$19 <span>/ month</span></div>
-      <div class="pricing-desc">For power users running serious multi-agent operations.</div>
-      <ul class="pricing-features">
-        <li>Unlimited agents</li>
-        <li>Full task history</li>
-        <li>Spend analytics board</li>
-        <li>Custom workflows</li>
-        <li>Priority support</li>
-        <li>Early access to new features</li>
-      </ul>
-      <a class="pricing-btn pricing-btn-fill" href="https://buy.stripe.com/6oU7sM6OSbqSbizcQ45wI00" target="_blank">Get The Construct Pro — $19/mo</a>
-      <p class="pricing-annual">
-        <a href="https://buy.stripe.com/7sYdRagpsgLc1HZ3fu5wI01" target="_blank">or $15/mo billed annually</a>
-      </p>
-    </div>
-  </div>
-  <p class="pricing-team">
-    <strong>Team tier</strong> coming soon. <a href="#early-access">Join the waitlist</a> with "team-interest".
-  </p>
-</section>
-
-<section class="bottom-cta" id="early-access">
-  <h2>Be first when we launch</h2>
-  <p>Get early access, launch pricing, and product updates.</p>
-  <form class="capture-form" id="ctaForm" onsubmit="handleSubmit(event, 'ctaForm')">
-    <input type="email" name="email" placeholder="you@example.com" required autocomplete="email" />
-    <button type="submit">Join Waitlist</button>
-  </form>
-  <p class="form-success" id="ctaSuccess">🎉 You're on the list — we'll be in touch.</p>
-  <p style="font-size:0.78rem;color:var(--text-muted);margin-top:0.6rem;">No spam. Unsubscribe anytime.</p>
-</section>
-
-<footer>
-  <p>© 2026 The Construct. Built for the <a href="https://openclaw.ai" target="_blank">OpenClaw</a> community.</p>
-  <div class="footer-links">
-    <a href="#">Docs</a>
-    <a href="https://github.com/neoagentops-glitch/morpheus-landing" target="_blank">GitHub</a>
-    <a href="https://discord.com/invite/clawd" target="_blank">Discord</a>
-    <a href="https://x.com/NeoAgentOps" target="_blank">@NeoAgentOps</a>
-  </div>
-</footer>
-
-<script>
-  const BUTTONDOWN_URL = 'https://buttondown.com/api/emails/embed-subscribe/constructdesktop';
-
-  async function handleSubmit(e, formId) {
-    e.preventDefault();
-    const form = e.target;
-    const email = form.querySelector('input[type="email"]').value;
-    const btn = form.querySelector('button');
-    const originalText = btn.textContent;
-    const successEl = document.getElementById(formId.replace('Form', 'Success'));
-
-    btn.disabled = true;
-    btn.textContent = 'Submitting…';
-
-    try {
-      const formData = new FormData();
-      formData.append('email', email);
-      formData.append('tag', 'landing');
-
-      const resp = await fetch(BUTTONDOWN_URL, {
-        method: 'POST',
-        body: formData,
-      });
-
-      // Buttondown returns a redirect on success — treat 200/201/302 as success
-      if (resp.ok || resp.status === 302 || resp.redirected) {
-        form.style.display = 'none';
-        if (successEl) successEl.style.display = 'block';
-        // Track signup in Plausible
-        if (window.plausible) window.plausible('Signup', { props: { form: formId } });
-      } else {
-        btn.disabled = false;
-        btn.textContent = originalText;
-        alert('Something went wrong — please try again.');
-      }
-    } catch (err) {
-      // Network error or CORS — Buttondown embed might not support fetch cleanly.
-      // Fall back: show success (Buttondown form submission works even on opaque responses)
-      form.style.display = 'none';
-      if (successEl) successEl.style.display = 'block';
-      if (window.plausible) window.plausible('Signup', { props: { form: formId } });
-    }
-  }
-</script>
-
+  </footer>
 </body>
 </html>
