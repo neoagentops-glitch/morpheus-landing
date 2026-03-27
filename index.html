@@ -6,13 +6,15 @@
   <title>The Construct — One screen. All your agents.</title>
   <meta name="description" content="The Construct is the orchestration layer for OpenClaw. One screen for your agents, sessions, projects, and approvals — built for people running multiple agents across multiple projects." />
   <meta property="og:title" content="The Construct — One screen. All your agents." />
-  <meta property="og:description" content="Your agents already run on OpenClaw. The Construct gives you the cockpit." />
+  <meta property="og:description" content="Your agents already run on OpenClaw. The Construct makes you the Architect." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://theconstructapp.com" />
   <meta property="og:image" content="https://theconstructapp.com/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="The Construct — One screen. All your agents." />
   <meta name="twitter:description" content="The orchestration layer for OpenClaw multi-agent workflows." />
+  <link rel="icon" type="image/png" href="./favicon.png" />
+  <script defer data-domain="theconstructapp.com" src="https://plausible.io/js/script.js"></script>
   <style>
     :root {
       --cream: #fcfbf9;
@@ -71,12 +73,71 @@
     }
 
     .brand {
-      font-weight: 700;
-      letter-spacing: -0.03em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
       color: var(--text);
       text-decoration: none;
-      font-size: 1rem;
+      font-size: 1.25rem;
     }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 6px rgba(210,180,140,0.4));
+    }
+
+    .hero-logo {
+      width: clamp(160px, 22vw, 240px);
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 40px rgba(210,180,140,0.35)) drop-shadow(0 0 80px rgba(210,180,140,0.15));
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .hero-copy p.hero-tagline {
+      font-size: clamp(1.15rem, 3vw, 1.5rem);
+      font-weight: 600;
+      color: var(--accent-2);
+      margin: 18px 0 0;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+      color: var(--muted);
+      margin: 18px 0 0;
+      text-align: center;
+      max-width: 420px;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .mobile-callout {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-size: 0.84rem;
+      border: 1px solid rgba(149,213,178,0.3);
+      color: #d8f3dc;
+      background: rgba(149,213,178,0.1);
+      font-weight: 500;
+    }
+
+    .mobile-callout svg {
+      flex-shrink: 0;
+    }
+
 
     .nav-links {
       display: none;
@@ -180,12 +241,6 @@
       flex-wrap: wrap;
       gap: 12px;
       margin-top: 26px;
-    }
-
-    .hero-note {
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 0.95rem;
     }
 
     .hero-card {
@@ -357,20 +412,23 @@
       color: var(--dark-text);
     }
 
+    /* FIX 4: section kickers - more prominent */
     .section-head {
-      margin-bottom: 26px;
+      margin-bottom: 40px;
       max-width: 760px;
     }
 
     .section-head .kicker {
       display: inline-block;
-      margin-bottom: 10px;
-      font-size: 0.8rem;
-      letter-spacing: 0.12em;
+      margin-bottom: 14px;
+      font-size: 1.05rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: inherit;
-      opacity: 0.66;
+      opacity: 0.88;
       font-weight: 700;
+      border-left: 3px solid var(--accent);
+      padding-left: 12px;
     }
 
     .section-head h2 {
@@ -431,6 +489,145 @@
       opacity: 0.8;
     }
 
+    /* FIX 5 + 6: carousel styles */
+    .carousel {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel-track {
+      display: flex;
+      width: 100%;
+      transition: transform 0.5s ease;
+    }
+
+    .carousel-slide {
+      flex: 0 0 100%;
+      overflow: hidden;
+      padding: 0 2px;
+    }
+
+    .carousel-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .carousel-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(26,26,46,0.18);
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.2s;
+    }
+
+    .carousel-dot.active {
+      background: var(--accent);
+    }
+
+    .dark .carousel-dot {
+      background: rgba(252,251,249,0.2);
+    }
+
+    .dark .carousel-dot.active {
+      background: var(--accent-2);
+    }
+
+    .carousel-nav {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--line-light);
+      background: rgba(255,255,255,0.9);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: background 0.2s;
+      color: var(--dark-text);
+      flex-shrink: 0;
+    }
+
+    .carousel-nav:hover {
+      background: #fff;
+    }
+
+    .dark .carousel-nav {
+      background: rgba(252,251,249,0.08);
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .dark .carousel-nav:hover {
+      background: rgba(252,251,249,0.14);
+    }
+
+    /* FIX 5: feature slide layout */
+    .feature-slide-inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 24px;
+      border: 1px solid var(--line-light);
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      min-height: 260px;
+      align-items: center;
+    }
+
+    .feature-slide-text .tag {
+      display: inline-flex;
+      margin-bottom: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.77rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(210,180,140,0.16);
+      color: inherit;
+    }
+
+    .feature-slide-text h3 {
+      margin: 0 0 10px;
+      font-size: 1.3rem;
+      letter-spacing: -0.03em;
+    }
+
+    .feature-slide-text p {
+      margin: 0;
+      color: inherit;
+      opacity: 0.8;
+      font-size: 1.02rem;
+      line-height: 1.6;
+    }
+
+    .feature-slide-screenshot {
+      aspect-ratio: 16 / 10;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--paper);
+    }
+
+    .feature-slide-screenshot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 14px;
+    }
+
     .screenshot-grid {
       display: grid;
       gap: 16px;
@@ -439,7 +636,7 @@
 
     .screenshot-card {
       padding: 18px;
-      border: 1px dashed rgba(252,251,249,0.25);
+      border: 1px solid rgba(252,251,249,0.12);
       background: rgba(252,251,249,0.04);
       min-height: 220px;
       display: grid;
@@ -463,6 +660,57 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       font-size: 0.86rem;
+    }
+
+    .window-chrome {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #1c1c2e;
+    }
+
+    .window-chrome .window-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .window-chrome .window-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .window-chrome .window-dot:nth-child(1) { background: #ff6b6b; }
+    .window-chrome .window-dot:nth-child(2) { background: #ffd166; }
+    .window-chrome .window-dot:nth-child(3) { background: #95d5b2; }
+
+    .window-chrome img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* Screenshot carousel slide caption */
+    .screenshot-slide-caption {
+      margin-top: 14px;
+      text-align: center;
+    }
+
+    .screenshot-slide-caption strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1.05rem;
+    }
+
+    .screenshot-slide-caption p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
     }
 
     .quote-box {
@@ -499,6 +747,7 @@
     .price-card.featured {
       border-color: rgba(26,26,46,0.26);
       transform: none;
+      padding-top: 52px;
     }
 
     .price-top {
@@ -537,12 +786,13 @@
       margin-top: 6px;
     }
 
+    /* FIX 1: red badge for Red Pill card */
     .featured-label {
       position: absolute;
-      top: 16px;
+      top: 14px;
       right: 16px;
-      background: var(--hero);
-      color: var(--text);
+      background: #dc2626;
+      color: #fff;
       padding: 7px 10px;
       border-radius: 999px;
       font-size: 0.75rem;
@@ -567,7 +817,7 @@
     }
 
     .price-list li::before {
-      content: "•";
+      content: "\2022";
       color: #8d6e63;
       font-weight: 900;
       line-height: 1;
@@ -653,12 +903,11 @@
       gap: 14px;
     }
 
-    .footer-brand img {
-      width: 120px;
-      max-width: 42vw;
-      border-radius: 14px;
-      background: #000;
-      padding: 8px;
+    .footer-brand img.footer-chair-logo {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(210,180,140,0.3));
     }
 
     .footer-links {
@@ -680,25 +929,19 @@
       .hero-grid { grid-template-columns: 1.1fr 0.9fr; }
       .shell-grid { grid-template-columns: 280px 1fr; }
       .sidebar { border-right: 1px solid rgba(252,251,249,0.08); border-bottom: 0; }
-      .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .screenshot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .feature-slide-inner { grid-template-columns: 1fr 1fr; }
       .pricing-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
       .pricing-grid .price-card.featured { transform: translateY(-8px); }
       .faq-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .signup-form { grid-template-columns: 1.5fr auto; }
       .footer-grid { grid-template-columns: 1.1fr auto; justify-content: space-between; }
     }
-
-    @media (min-width: 980px) {
-      .feature-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .screenshot-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    }
   </style>
 </head>
 <body>
   <header class="site-header">
     <div class="wrap nav">
-      <a class="brand" href="#top">The Construct</a>
+      <a class="brand" href="#top"><img class="brand-logo" src="./chair-logo.png" alt="R3 chair logo" />The Construct</a>
       <nav class="nav-links" aria-label="Primary">
         <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
@@ -714,9 +957,11 @@
         <div class="hero-copy">
           <div class="eyebrow-row">
             <span class="pill pill-built">Built for OpenClaw</span>
-            <span class="pill">Native desktop command center</span>
+            <span class="pill">macOS &middot; Windows &middot; Mobile</span>
+            <span class="mobile-callout"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>Works on mobile via Tailscale + PWA</span>
           </div>
-          <h1>One screen.<br />All your agents.</h1>
+          <h1>The Construct</h1>
+          <p class="hero-tagline">One screen. All your agents.</p>
           <p>
             A native desktop app that replaces terminal chaos with a single orchestration layer for all your OpenClaw agents.
           </p>
@@ -724,18 +969,26 @@
             <a class="btn btn-primary" href="#early-access">Get Early Access</a>
             <a class="btn btn-secondary" href="#pricing">See pricing</a>
           </div>
-          <div class="hero-note">
-            Your agents already run on OpenClaw. The Construct gives you the cockpit.
-          </div>
         </div>
 
-        <div class="hero-card" aria-label="Construct orchestration diagram placeholder">
-          <div class="shot-box hero-diagram">[ORCHESTRATION DIAGRAM]</div>
-          <div class="hero-diagram-copy">
-            <strong>System orchestration overview</strong>
-            <p>A clean labeled illustration or product screenshot placeholder belongs here — not a simulated app UI.</p>
-          </div>
+        <div style="display:grid; place-items:center; padding:24px 0;">
+          <img class="hero-logo" src="./chair-logo.png" alt="The Construct: R3 chair logo" />
+          <p class="hero-subtitle">Your agents already run on OpenClaw.<br />The Construct makes you the Architect.</p>
         </div>
+      </div>
+    </section>
+
+    <section class="block dark" style="padding: 48px 0 64px;">
+      <div class="wrap" style="max-width: 960px;">
+        <div class="window-chrome">
+          <div class="window-titlebar">
+            <span class="window-dot"></span>
+            <span class="window-dot"></span>
+            <span class="window-dot"></span>
+          </div>
+          <img src="./screenshot-orchestration.png" alt="Orchestration plan cards showing agent assignments and approval gate" loading="lazy" width="1200" />
+        </div>
+        <p style="text-align:center; margin:20px 0 0; color:var(--muted); font-size:1.08rem; font-weight:500; line-height:1.5;">Describe what you need. Approve the plan. Watch your agents execute.</p>
       </div>
     </section>
 
@@ -749,48 +1002,100 @@
           </p>
         </div>
 
-        <div class="feature-grid">
-          <article class="feature-card">
-            <div class="tag">Dashboard</div>
-            <h3>See the whole system at once</h3>
-            <p>One command center for agent status, lane assignments, active threads, project context, and what’s running now. No tab juggling. No terminal archaeology.</p>
-          </article>
+        <div class="carousel" data-interval="8000">
+          <div class="carousel-track">
 
-          <article class="feature-card">
-            <div class="tag">Session Persistence</div>
-            <h3>Bring your existing setup with you</h3>
-            <p>Your agents already run on OpenClaw. The Construct reads what you already have, keeps session history intact, and makes adoption feel like stepping into a cockpit — not rebuilding your system from scratch.</p>
-          </article>
+            <div class="carousel-slide">
+              <div class="feature-slide-inner">
+                <div class="feature-slide-text">
+                  <div class="tag">Dashboard</div>
+                  <h3>See the whole system at once</h3>
+                  <p>One command center for agent status, lane assignments, active threads, project context, and what's running now. No tab juggling. No terminal archaeology.</p>
+                </div>
+                <div class="feature-slide-screenshot"><img src="./screenshot-hero.png" alt="The Construct dashboard" loading="lazy" /></div>
+              </div>
+            </div>
 
-          <article class="feature-card">
-            <div class="tag">5-lane framework</div>
-            <h3>Structure that keeps agents coherent</h3>
-            <p>SYSTEM, BUILD, CONTENT, DESIGN, and OPS — with Operator, Tank, Link, Mouse, and Trinity as the default lineup. Every message lands in the right lane with the right project header.</p>
-          </article>
+            <div class="carousel-slide">
+              <div class="feature-slide-inner">
+                <div class="feature-slide-text">
+                  <div class="tag">Session Persistence</div>
+                  <h3>Bring your existing setup with you</h3>
+                  <p>Your agents already run on OpenClaw. The Construct reads what you already have, keeps session history intact, and makes adoption feel like stepping into a cockpit.</p>
+                </div>
+                <div class="feature-slide-screenshot"><img src="./screenshot-hero.png" alt="Session persistence in sidebar" loading="lazy" /></div>
+              </div>
+            </div>
 
-          <article class="feature-card">
-            <div class="tag">Orchestration</div>
-            <h3>The differentiator</h3>
-            <p>Describe what you need. The system drafts a plan — which agents, what order, what dependencies — and you approve before execution. You stay in control without doing the coordination manually.</p>
-          </article>
+            <div class="carousel-slide">
+              <div class="feature-slide-inner">
+                <div class="feature-slide-text">
+                  <div class="tag">5-lane framework</div>
+                  <h3>Structure that keeps agents coherent</h3>
+                  <p>SYSTEM, BUILD, CONTENT, DESIGN, and OPS: with Operator, Tank, Link, Mouse, and Trinity as the default lineup. Every message lands in the right lane with the right project header.</p>
+                </div>
+                <div class="feature-slide-screenshot"><img src="./screenshot-mobile.png" alt="5-lane framework in sidebar" loading="lazy" /></div>
+              </div>
+            </div>
 
-          <article class="feature-card">
-            <div class="tag">Context meter</div>
-            <h3>See session health before it becomes a problem</h3>
-            <p>The context meter makes token pressure visible so you can steer proactively instead of guessing when a thread is getting heavy or close to the edge.</p>
-          </article>
+            <div class="carousel-slide">
+              <div class="feature-slide-inner">
+                <div class="feature-slide-text">
+                  <div class="tag">Orchestration</div>
+                  <h3>The differentiator</h3>
+                  <p>Describe what you need. The system drafts a plan: which agents, what order, what dependencies. You approve before execution. You stay in control without doing the coordination manually.</p>
+                </div>
+                <div class="feature-slide-screenshot"><img src="./screenshot-orchestration.png" alt="Orchestration plan cards" loading="lazy" /></div>
+              </div>
+            </div>
 
-          <article class="feature-card">
-            <div class="tag">Auto-wrap + transfer</div>
-            <h3>Keep work moving without manual babysitting</h3>
-            <p>Auto-wrap and transfer help work continue cleanly when a session needs to roll forward. Instead of losing momentum, you preserve continuity and hand off the next move with context attached.</p>
-          </article>
+            <div class="carousel-slide">
+              <div class="feature-slide-inner">
+                <div class="feature-slide-text">
+                  <div class="tag">Context meter</div>
+                  <h3>See session health before it becomes a problem</h3>
+                  <p>The context meter makes token pressure visible so you can steer proactively instead of guessing when a thread is getting heavy or close to the edge.</p>
+                </div>
+                <div class="feature-slide-screenshot"><img src="./screenshot-hero.png" alt="Context meter at bottom of dashboard" loading="lazy" /></div>
+              </div>
+            </div>
 
-          <article class="feature-card">
-            <div class="tag">Mobile access</div>
-            <h3>Check in without sitting at the desk</h3>
-            <p>Use Tailscale + PWA access to check on running work, review the system state, and stay close to your agent fleet from your phone when you’re away.</p>
-          </article>
+            <div class="carousel-slide">
+              <div class="feature-slide-inner">
+                <div class="feature-slide-text">
+                  <div class="tag">Auto-wrap + transfer</div>
+                  <h3>Keep work moving without manual babysitting</h3>
+                  <p>Auto-wrap and transfer help work continue cleanly when a session needs to roll forward. Instead of losing momentum, you preserve continuity and hand off the next move with context attached.</p>
+                </div>
+                <div class="feature-slide-screenshot"><img src="./screenshot-hero.png" alt="Auto-wrap and transfer controls" loading="lazy" /></div>
+              </div>
+            </div>
+
+            <div class="carousel-slide">
+              <div class="feature-slide-inner">
+                <div class="feature-slide-text">
+                  <div class="tag">Mobile access</div>
+                  <h3>Check in without sitting at the desk</h3>
+                  <p>Use Tailscale + PWA access to check on running work, review the system state, and stay close to your agent fleet from your phone when you're away.</p>
+                </div>
+                <div class="feature-slide-screenshot"><img src="./screenshot-mobile.png" alt="Mobile PWA view" loading="lazy" /></div>
+              </div>
+            </div>
+
+          </div>
+          <div class="carousel-controls">
+            <button class="carousel-nav prev" aria-label="Previous">&larr;</button>
+            <div class="carousel-dots">
+              <button class="carousel-dot active" aria-label="Slide 1"></button>
+              <button class="carousel-dot" aria-label="Slide 2"></button>
+              <button class="carousel-dot" aria-label="Slide 3"></button>
+              <button class="carousel-dot" aria-label="Slide 4"></button>
+              <button class="carousel-dot" aria-label="Slide 5"></button>
+              <button class="carousel-dot" aria-label="Slide 6"></button>
+              <button class="carousel-dot" aria-label="Slide 7"></button>
+            </div>
+            <button class="carousel-nav next" aria-label="Next">&rarr;</button>
+          </div>
         </div>
 
       </div>
@@ -799,31 +1104,67 @@
     <section class="block dark">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">Screenshot placeholders</div>
+          <div class="kicker">See it in action</div>
         </div>
 
-        <div class="screenshot-grid">
-          <article class="screenshot-card">
-            <div class="shot-box">[SCREENSHOT]</div>
-            <div>
-              <strong>Hero shot</strong>
-              <p>Full Construct window showing the multi-agent dashboard with 5 agents, status indicators, and lane labels.</p>
+        <div class="carousel" data-interval="10000">
+          <div class="carousel-track">
+
+            <div class="carousel-slide">
+              <div class="window-chrome">
+                <div class="window-titlebar">
+                  <span class="window-dot"></span>
+                  <span class="window-dot"></span>
+                  <span class="window-dot"></span>
+                </div>
+                <img src="./screenshot-hero.png" alt="The Construct: full app window with Matrix-themed conversation across multiple agent lanes" loading="lazy" width="1200" />
+              </div>
+              <div class="screenshot-slide-caption">
+                <strong>Hero shot</strong>
+                <p>Five lanes. Five agents. One conversation that started it all. "What is the essence of the Matrix?" and the answer describes exactly what you're looking at.</p>
+              </div>
             </div>
-          </article>
-          <article class="screenshot-card">
-            <div class="shot-box">[SCREENSHOT]</div>
-            <div>
-              <strong>Orchestration view</strong>
-              <p>Drafted execution plan with task cards, agent assignments, and approval actions — the real differentiator shot.</p>
+
+            <div class="carousel-slide">
+              <div class="window-chrome">
+                <div class="window-titlebar">
+                  <span class="window-dot"></span>
+                  <span class="window-dot"></span>
+                  <span class="window-dot"></span>
+                </div>
+                <img src="./screenshot-orchestration.png" alt="Orchestration plan with 3 task cards assigned to Tank, Link, and Trinity agents with approval gate" loading="lazy" width="1200" />
+              </div>
+              <div class="screenshot-slide-caption">
+                <strong>Orchestration view</strong>
+                <p>Three agents. Three lanes. One approval gate. You see the plan before anything runs.</p>
+              </div>
             </div>
-          </article>
-          <article class="screenshot-card">
-            <div class="shot-box">[SCREENSHOT]</div>
-            <div>
-              <strong>Mobile view</strong>
-              <p>PWA check-in on a phone via Tailscale, showing that the cockpit is still usable when you’re not at the Mac mini.</p>
+
+            <div class="carousel-slide">
+              <div class="window-chrome">
+                <div class="window-titlebar">
+                  <span class="window-dot"></span>
+                  <span class="window-dot"></span>
+                  <span class="window-dot"></span>
+                </div>
+                <img src="./screenshot-mobile.png" alt="Multi-lane sidebar showing all 5 agent lanes with active sessions" loading="lazy" width="1200" />
+              </div>
+              <div class="screenshot-slide-caption">
+                <strong>Multi-lane sidebar</strong>
+                <p>SYSTEM, BUILD, CONTENT, DESIGN, OPS: every thread lands in the right lane. No tab juggling. No lost context.</p>
+              </div>
             </div>
-          </article>
+
+          </div>
+          <div class="carousel-controls">
+            <button class="carousel-nav prev" aria-label="Previous">&larr;</button>
+            <div class="carousel-dots">
+              <button class="carousel-dot active" aria-label="Slide 1"></button>
+              <button class="carousel-dot" aria-label="Slide 2"></button>
+              <button class="carousel-dot" aria-label="Slide 3"></button>
+            </div>
+            <button class="carousel-nav next" aria-label="Next">&rarr;</button>
+          </div>
         </div>
       </div>
     </section>
@@ -879,7 +1220,7 @@
           <article class="price-card">
             <div class="price-top">
               <div>
-                <h3 class="price-name">Zion</h3>
+                <h3 class="price-name">Nebuchadnezzar</h3>
                 <p class="price-copy">For teams running shared agent fleets. Coming soon.</p>
               </div>
               <div class="price-amount">Contact<span>Team</span></div>
@@ -907,7 +1248,7 @@
         <div class="faq-grid">
           <article class="faq-item">
             <h3>Do I need my own OpenClaw setup?</h3>
-            <p>Yes. The Construct connects to your existing OpenClaw gateway. It doesn’t include LLM access — you bring your own Claude Max subscription, API keys, or other model providers.</p>
+            <p>Yes. The Construct connects to your existing OpenClaw gateway. It doesn't include LLM access — you bring your own Claude Max subscription, API keys, or other model providers.</p>
           </article>
           <article class="faq-item">
             <h3>Can I use The Construct with non-Claude models?</h3>
@@ -919,11 +1260,11 @@
           </article>
           <article class="faq-item">
             <h3>Can I cancel anytime?</h3>
-            <p>Yes. No contracts. Cancel from your account and you’ll revert to Blue Pill at the end of your billing period. Your session data stays — nothing is deleted.</p>
+            <p>Yes. No contracts. Cancel from your account and you'll revert to Blue Pill at the end of your billing period. Your session data stays — nothing is deleted.</p>
           </article>
           <article class="faq-item">
             <h3>Is there a student or open-source discount?</h3>
-            <p>Email us. We’re happy to work something out for students and active open-source contributors.</p>
+            <p>Email us. We're happy to work something out for students and active open-source contributors.</p>
           </article>
         </div>
       </div>
@@ -935,10 +1276,10 @@
           <div class="section-head" style="margin-bottom:18px; max-width:none;">
             <div class="kicker">Early access</div>
             <h2>Get early access to The Construct.</h2>
-            <p>Buttondown embed placeholder for now. Hook the form action to the final list later — the structure is already in place.</p>
+            <p>Join the early access list. Launch updates, early access, and the occasional field note from the build.</p>
           </div>
 
-          <form class="signup-form" action="#" method="post" onsubmit="event.preventDefault(); this.classList.add('submitted');">
+          <form class="signup-form" action="https://buttondown.com/api/emails/embed-subscribe/theconstruct" method="post" target="popupwindow">
             <input type="email" name="email" placeholder="Enter your email" aria-label="Email address" required />
             <button class="btn btn-primary" type="submit">Get Early Access</button>
           </form>
@@ -951,10 +1292,12 @@
   <footer>
     <div class="wrap footer-grid">
       <div class="footer-brand">
-        <img src="./r3-chair-mark.png" alt="R3 chair mark" />
-        <div>
-          <strong style="display:block; color:#fcfbf9; margin-bottom:8px;">The Construct</strong>
-          <span>Your agents already run on OpenClaw. The Construct gives you the cockpit.</span>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <img class="footer-chair-logo" src="./chair-logo.png" alt="R3 chair logo" />
+          <div>
+            <strong style="display:block; color:#fcfbf9; margin-bottom:4px; font-size:1.15rem; letter-spacing:-0.03em;">The Construct</strong>
+            <span>Your agents already run on OpenClaw. The Construct makes you the Architect.</span>
+          </div>
         </div>
       </div>
       <div>
@@ -968,5 +1311,51 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.carousel').forEach(function (carousel) {
+        var track = carousel.querySelector('.carousel-track');
+        var slides = carousel.querySelectorAll('.carousel-slide');
+        var dots = carousel.querySelectorAll('.carousel-dot');
+        var prevBtn = carousel.querySelector('.carousel-nav.prev');
+        var nextBtn = carousel.querySelector('.carousel-nav.next');
+        var interval = parseInt(carousel.dataset.interval, 10) || 4000;
+        var current = 0;
+        var timer;
+
+        function goTo(index) {
+          if (index < 0) index = slides.length - 1;
+          if (index >= slides.length) index = 0;
+          current = index;
+          track.style.transform = 'translateX(-' + (current * 100) + '%)';
+          dots.forEach(function (d, i) {
+            d.classList.toggle('active', i === current);
+          });
+        }
+
+        function startAuto() {
+          stopAuto();
+          timer = setInterval(function () { goTo(current + 1); }, interval);
+        }
+
+        function stopAuto() {
+          if (timer) { clearInterval(timer); timer = null; }
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', function () { goTo(current - 1); startAuto(); });
+        if (nextBtn) nextBtn.addEventListener('click', function () { goTo(current + 1); startAuto(); });
+        dots.forEach(function (dot, i) {
+          dot.addEventListener('click', function () { goTo(i); startAuto(); });
+        });
+
+        carousel.addEventListener('mouseenter', stopAuto);
+        carousel.addEventListener('mouseleave', startAuto);
+
+        goTo(0);
+        startAuto();
+      });
+    });
+  </script>
 </body>
 </html>
