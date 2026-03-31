@@ -1,1363 +1,772 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Construct — One screen. All your agents.</title>
-  <meta name="description" content="The Construct is the orchestration layer for OpenClaw. One screen for your agents, sessions, projects, and approvals — built for people running multiple agents across multiple projects." />
-  <meta property="og:title" content="The Construct — One screen. All your agents." />
-  <meta property="og:description" content="Your agents already run on OpenClaw. The Construct makes you the Architect." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://theconstructapp.com" />
-  <meta property="og:image" content="https://theconstructapp.com/og-image.png" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="The Construct — One screen. All your agents." />
-  <meta name="twitter:description" content="The orchestration layer for OpenClaw multi-agent workflows." />
-  <link rel="icon" type="image/png" href="./favicon.png" />
-  <!-- Privacy-friendly analytics by Plausible -->
-<script async src="https://plausible.io/js/pa-r2wniDlwCzLbaWgBSZhWK.js"></script>
-<script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Construct — One prompt. Full control.</title>
+  <meta name="description" content="A native desktop app that turns a detailed project brief into a coordinated fleet of AI agents — with a live task graph so you see everything and miss nothing.">
+  <meta property="og:title" content="The Construct — One prompt. Full control.">
+  <meta property="og:description" content="A native desktop app that turns a detailed project brief into a coordinated fleet of AI agents.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://theconstructapp.com">
+  <meta property="og:image" content="https://theconstructapp.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Construct — One prompt. Full control.">
+  <meta name="twitter:description" content="A native desktop app that turns a detailed project brief into a coordinated fleet of AI agents.">
+  <link rel="canonical" href="https://theconstructapp.com/">
+  <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <link rel="icon" href="./favicon.ico">
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            accent: '#00d4aa',
+            'accent-hover': '#00f0c0',
+            surface: '#0d0d1a',
+            'surface-border': '#1a1a2e',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Plausible Analytics -->
+  <script async src="https://plausible.io/js/pa-r2wniDlwCzLbaWgBSZhWK.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+
   <style>
-    :root {
-      --cream: #fcfbf9;
-      --paper: #f5f1ea;
-      --ink: #151525;
-      --hero: #1a1a2e;
-      --hero-2: #22223a;
-      --text: #fcfbf9;
-      --muted: rgba(252, 251, 249, 0.72);
-      --dark-text: #1a1a2e;
-      --dark-muted: #5f6175;
-      --line: rgba(252, 251, 249, 0.12);
-      --line-light: rgba(26, 26, 46, 0.1);
-      --accent: #d2b48c;
-      --accent-2: #f3dfc1;
-      --success: #95d5b2;
-      --shadow: 0 24px 60px rgba(0,0,0,0.26);
-      --radius: 22px;
-      --radius-sm: 14px;
-      --max: 1180px;
+    /* Fade-in animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--cream);
-      color: var(--dark-text);
-      line-height: 1.55;
-    }
-
-    a { color: inherit; }
-    img { max-width: 100%; display: block; }
-
-    .wrap {
-      width: min(var(--max), calc(100% - 32px));
-      margin: 0 auto;
-    }
-
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(14px);
-      background: rgba(26, 26, 46, 0.78);
-      border-bottom: 1px solid rgba(252,251,249,0.08);
-    }
-
-    .nav {
+    /* Screenshot placeholder */
+    .screenshot-placeholder {
+      background: #0d0d1a;
+      border: 1px solid #1a1a2e;
+      border-radius: 12px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 14px 0;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      color: var(--text);
-      text-decoration: none;
-      font-size: 1.25rem;
-    }
-
-    .brand-logo {
-      width: 32px;
-      height: 32px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 6px rgba(210,180,140,0.4));
-    }
-
-    .hero-logo {
-      width: clamp(160px, 22vw, 240px);
-      height: auto;
-      object-fit: contain;
-      filter: drop-shadow(0 0 40px rgba(210,180,140,0.35)) drop-shadow(0 0 80px rgba(210,180,140,0.15));
-      animation: float 6s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
-    }
-
-    .hero-copy p.hero-tagline {
-      font-size: clamp(1.15rem, 3vw, 1.5rem);
-      font-weight: 600;
-      color: var(--accent-2);
-      margin: 18px 0 0;
-      letter-spacing: -0.02em;
-    }
-
-    .hero-subtitle {
-      font-size: clamp(1.05rem, 2.5vw, 1.25rem);
-      color: var(--muted);
-      margin: 18px 0 0;
+      justify-content: center;
       text-align: center;
-      max-width: 420px;
-      line-height: 1.5;
+      color: #4a4a5a;
+      font-size: 0.875rem;
       font-weight: 500;
+      min-height: 200px;
+      padding: 24px;
     }
 
-    .mobile-callout {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: 999px;
-      padding: 9px 16px;
-      font-size: 0.84rem;
-      border: 1px solid rgba(149,213,178,0.3);
-      color: #d8f3dc;
-      background: rgba(149,213,178,0.1);
-      font-weight: 500;
+    /* Story expand/collapse */
+    .story-beats {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.6s ease;
+    }
+    .story-beats.expanded {
+      max-height: 3000px;
     }
 
-    .mobile-callout svg {
-      flex-shrink: 0;
+    /* FAQ accordion */
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 500px;
+    }
+    .faq-chevron {
+      transition: transform 0.3s ease;
+    }
+    .faq-item.open .faq-chevron {
+      transform: rotate(180deg);
     }
 
-
-    .nav-links {
+    /* Screenshot carousel: CSS horizontal scroll-snap */
+    .carousel-scroll {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      gap: 16px;
+      padding-bottom: 8px;
+    }
+    .carousel-scroll::-webkit-scrollbar {
       display: none;
-      gap: 20px;
-      align-items: center;
     }
-
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.95rem;
-    }
-
-    .nav-links a:hover { color: var(--text); }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 48px;
-      padding: 0 18px;
-      border-radius: 999px;
-      border: 1px solid transparent;
-      text-decoration: none;
-      font-weight: 600;
-      transition: transform .18s ease, opacity .18s ease, border-color .18s ease, background .18s ease;
-      cursor: pointer;
-      font-size: 0.96rem;
-    }
-
-    .btn:hover { transform: translateY(-1px); }
-    .btn-primary {
-      background: var(--accent-2);
-      color: var(--ink);
-    }
-    .btn-secondary {
-      background: transparent;
-      border-color: rgba(252,251,249,0.18);
-      color: var(--text);
-    }
-    .btn-light {
-      background: var(--hero);
-      color: var(--text);
-    }
-
-    .hero {
-      background: radial-gradient(circle at top right, rgba(210,180,140,0.18), transparent 28%), linear-gradient(180deg, var(--hero), #151522 100%);
-      color: var(--text);
-      padding: 56px 0 72px;
-    }
-
-    .hero-grid {
-      display: grid;
-      gap: 32px;
-      align-items: center;
-    }
-
-    .eyebrow-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: 999px;
-      padding: 9px 14px;
-      font-size: 0.84rem;
-      border: 1px solid rgba(252,251,249,0.14);
-      color: var(--text);
-      background: rgba(252,251,249,0.06);
-    }
-
-    .pill-built {
-      background: rgba(149,213,178,0.14);
-      border-color: rgba(149,213,178,0.35);
-      color: #d8f3dc;
-      font-weight: 600;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2.7rem, 9vw, 5rem);
-      line-height: 0.96;
-      letter-spacing: -0.06em;
-    }
-
-    .hero-copy p {
-      font-size: clamp(1.06rem, 2.8vw, 1.28rem);
-      color: var(--muted);
-      max-width: 720px;
-      margin: 18px 0 0;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 26px;
-    }
-
-    .hero-card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
-      border: 1px solid rgba(252,251,249,0.12);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: var(--shadow);
-    }
-
-    .app-shell {
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid rgba(252,251,249,0.1);
-      background: #12121d;
-    }
-
-    .app-topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(252,251,249,0.08);
-      background: rgba(255,255,255,0.03);
-    }
-
-    .traffic {
-      display: flex;
-      gap: 7px;
-    }
-    .traffic span {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      display: block;
-      background: rgba(252,251,249,0.2);
-    }
-    .traffic span:nth-child(1) { background: #ff6b6b; }
-    .traffic span:nth-child(2) { background: #ffd166; }
-    .traffic span:nth-child(3) { background: #95d5b2; }
-
-    .app-title {
-      font-size: 0.84rem;
-      color: var(--muted);
-    }
-
-    .shell-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-    }
-
-    .sidebar {
-      padding: 16px;
-      border-bottom: 1px solid rgba(252,251,249,0.08);
-      background: rgba(255,255,255,0.02);
-    }
-
-    .sidebar h3,
-    .main-panel h3 {
-      margin: 0 0 12px;
-      font-size: 0.84rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(252,251,249,0.58);
-    }
-
-    .lane-list,
-    .plan-list,
-    .metric-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .lane-item,
-    .plan-item,
-    .metric,
-    .screenshot-card,
-    .faq-item,
-    .price-card,
-    .feature-card,
-    .quote-box {
-      border-radius: 16px;
-    }
-
-    .lane-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 12px 14px;
-      background: rgba(252,251,249,0.04);
-      border: 1px solid rgba(252,251,249,0.08);
-      color: var(--text);
-    }
-
-    .lane-item small {
-      display: block;
-      color: rgba(252,251,249,0.6);
-      margin-top: 3px;
-      font-size: 0.8rem;
-    }
-
-    .lane-badge {
-      border-radius: 999px;
-      padding: 6px 9px;
-      font-size: 0.72rem;
-      color: #10101a;
-      background: var(--accent-2);
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .main-panel {
-      padding: 16px;
-    }
-
-    .metric-list {
-      grid-template-columns: repeat(2, 1fr);
-      margin-bottom: 14px;
-    }
-
-    .metric {
-      padding: 12px 14px;
-      background: rgba(252,251,249,0.04);
-      border: 1px solid rgba(252,251,249,0.08);
-    }
-
-    .metric strong {
-      display: block;
-      font-size: 1.3rem;
-      margin-bottom: 3px;
-      letter-spacing: -0.04em;
-    }
-
-    .metric span {
-      color: rgba(252,251,249,0.6);
-      font-size: 0.84rem;
-    }
-
-    .plan-item {
-      padding: 14px;
-      background: rgba(252,251,249,0.04);
-      border: 1px solid rgba(252,251,249,0.08);
-    }
-
-    .plan-item strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 0.95rem;
-    }
-
-    .plan-item span {
-      color: rgba(252,251,249,0.62);
-      font-size: 0.86rem;
-    }
-
-    section.block {
-      padding: 72px 0;
-    }
-
-    section.block.dark {
-      background: var(--hero);
-      color: var(--text);
-    }
-
-    section.block.light {
-      background: var(--cream);
-      color: var(--dark-text);
-    }
-
-    /* FIX 4: section kickers - more prominent */
-    .section-head {
-      margin-bottom: 40px;
-      max-width: 760px;
-    }
-
-    .section-head .kicker {
-      display: inline-block;
-      margin-bottom: 14px;
-      font-size: 1.05rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: inherit;
-      opacity: 0.88;
-      font-weight: 700;
-      border-left: 3px solid var(--accent);
-      padding-left: 12px;
-    }
-
-    .section-head h2 {
-      margin: 0;
-      font-size: clamp(2rem, 5vw, 3rem);
-      letter-spacing: -0.05em;
-      line-height: 1.02;
-    }
-
-    .section-head p {
-      margin: 14px 0 0;
-      font-size: 1.05rem;
-      color: inherit;
-      opacity: 0.78;
-      max-width: 740px;
-    }
-
-    .feature-grid {
-      display: grid;
-      gap: 16px;
-    }
-
-    .feature-card {
-      padding: 20px;
-      border: 1px solid var(--line-light);
-      background: #fff;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-    }
-
-    .dark .feature-card {
-      background: rgba(252,251,249,0.04);
-      border-color: var(--line);
-      box-shadow: none;
-    }
-
-    .feature-card .tag {
-      display: inline-flex;
-      margin-bottom: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 0.77rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      background: rgba(210,180,140,0.16);
-      color: inherit;
-    }
-
-    .feature-card h3 {
-      margin: 0 0 10px;
-      font-size: 1.22rem;
-      letter-spacing: -0.03em;
-    }
-
-    .feature-card p {
-      margin: 0;
-      color: inherit;
-      opacity: 0.8;
-    }
-
-    /* FIX 5 + 6: carousel styles */
-    .carousel {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .carousel-track {
-      display: flex;
-      width: 100%;
-      transition: transform 0.5s ease;
-    }
-
     .carousel-slide {
-      flex: 0 0 100%;
-      overflow: hidden;
-      padding: 0 2px;
+      flex: 0 0 85%;
+      scroll-snap-align: start;
+    }
+    @media (min-width: 768px) {
+      .carousel-slide {
+        flex: 0 0 55%;
+      }
     }
 
-    .carousel-controls {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 16px;
-      margin-top: 24px;
-    }
-
-    .carousel-dots {
-      display: flex;
-      gap: 8px;
-    }
-
-    .carousel-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      border: none;
-      background: rgba(26,26,46,0.18);
-      cursor: pointer;
-      padding: 0;
-      transition: background 0.2s;
-    }
-
-    .carousel-dot.active {
-      background: var(--accent);
-    }
-
-    .dark .carousel-dot {
-      background: rgba(252,251,249,0.2);
-    }
-
-    .dark .carousel-dot.active {
-      background: var(--accent-2);
-    }
-
-    .carousel-nav {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      border: 1px solid var(--line-light);
-      background: rgba(255,255,255,0.9);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      transition: background 0.2s;
-      color: var(--dark-text);
-      flex-shrink: 0;
-    }
-
-    .carousel-nav:hover {
-      background: #fff;
-    }
-
-    .dark .carousel-nav {
-      background: rgba(252,251,249,0.08);
-      border-color: var(--line);
-      color: var(--text);
-    }
-
-    .dark .carousel-nav:hover {
-      background: rgba(252,251,249,0.14);
-    }
-
-    /* FIX 5: feature slide layout */
-    .feature-slide-inner {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 24px;
-      padding: 24px;
-      border: 1px solid var(--line-light);
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-      min-height: 260px;
-      align-items: center;
-    }
-
-    .feature-slide-text .tag {
-      display: inline-flex;
-      margin-bottom: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 0.77rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      background: rgba(210,180,140,0.16);
-      color: inherit;
-    }
-
-    .feature-slide-text h3 {
-      margin: 0 0 10px;
-      font-size: 1.3rem;
-      letter-spacing: -0.03em;
-    }
-
-    .feature-slide-text p {
-      margin: 0;
-      color: inherit;
-      opacity: 0.8;
-      font-size: 1.02rem;
-      line-height: 1.6;
-    }
-
-    .feature-slide-screenshot {
-      aspect-ratio: 16 / 10;
-      border-radius: 14px;
-      overflow: hidden;
-      background: var(--paper);
-    }
-
-    .feature-slide-screenshot img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 14px;
-    }
-
-    .screenshot-grid {
-      display: grid;
-      gap: 16px;
-      margin-top: 30px;
-    }
-
-    .screenshot-card {
-      padding: 18px;
-      border: 1px solid rgba(252,251,249,0.12);
-      background: rgba(252,251,249,0.04);
-      min-height: 220px;
-      display: grid;
-      align-content: space-between;
-      gap: 18px;
-    }
-
-    .light .screenshot-card {
-      border-color: rgba(26,26,46,0.15);
-      background: #fff;
-    }
-
-    .shot-box {
-      aspect-ratio: 16 / 10;
-      border-radius: 14px;
-      border: 1px dashed currentColor;
-      opacity: 0.5;
-      display: grid;
-      place-items: center;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-size: 0.86rem;
-    }
-
-    .window-chrome {
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2);
-      border: 1px solid rgba(255,255,255,0.08);
-      background: #1c1c2e;
-    }
-
-    .window-chrome .window-titlebar {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 10px 14px;
-      background: rgba(255,255,255,0.04);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .window-chrome .window-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .window-chrome .window-dot:nth-child(1) { background: #ff6b6b; }
-    .window-chrome .window-dot:nth-child(2) { background: #ffd166; }
-    .window-chrome .window-dot:nth-child(3) { background: #95d5b2; }
-
-    .window-chrome img {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-    /* Screenshot carousel slide caption */
-    .screenshot-slide-caption {
-      margin-top: 14px;
-      text-align: center;
-    }
-
-    .screenshot-slide-caption strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 1.05rem;
-    }
-
-    .screenshot-slide-caption p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .quote-box {
-      padding: 22px;
-      background: linear-gradient(180deg, rgba(243,223,193,0.34), rgba(243,223,193,0.14));
-      border: 1px solid rgba(210,180,140,0.28);
-      color: var(--ink);
-      margin-top: 28px;
-    }
-
-    .quote-box p {
-      margin: 0;
-      font-size: 1.05rem;
-      line-height: 1.5;
-    }
-
-    .quote-box strong { display: block; margin-bottom: 8px; }
-
-    .pricing-grid {
-      display: grid;
-      gap: 18px;
-      margin-top: 28px;
-    }
-
-    .price-card {
-      background: #fff;
-      border: 1px solid var(--line-light);
-      padding: 24px 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .price-card.featured {
-      border-color: rgba(26,26,46,0.26);
-      transform: none;
-      padding-top: 52px;
-    }
-
-    .price-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 14px;
-    }
-
-    .price-name {
-      margin: 0;
-      font-size: 1.4rem;
-      letter-spacing: -0.04em;
-    }
-
-    .price-copy {
-      color: var(--dark-muted);
-      margin: 8px 0 0;
-      font-size: 0.96rem;
-    }
-
-    .price-amount {
-      font-size: 2.35rem;
-      font-weight: 800;
-      letter-spacing: -0.06em;
-      line-height: 0.95;
-      text-align: right;
-    }
-
-    .price-amount span {
-      display: block;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--dark-muted);
-      margin-top: 6px;
-    }
-
-    /* FIX 1: red badge for Red Pill card */
-    .featured-label {
-      position: absolute;
-      top: 14px;
-      right: 16px;
-      background: #dc2626;
-      color: #fff;
-      padding: 7px 10px;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .price-list {
-      list-style: none;
-      padding: 0;
-      margin: 18px 0 0;
-      display: grid;
-      gap: 10px;
-    }
-
-    .price-list li {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      color: var(--dark-text);
-    }
-
-    .price-list li::before {
-      content: "\2022";
-      color: #8d6e63;
-      font-weight: 900;
-      line-height: 1;
-      margin-top: 1px;
-    }
-
-    .faq-grid {
-      display: grid;
-      gap: 14px;
-      margin-top: 24px;
-    }
-
-    .faq-item {
-      background: #fff;
-      border: 1px solid var(--line-light);
-      padding: 18px;
-      box-shadow: 0 10px 28px rgba(0,0,0,0.03);
-    }
-
-    .faq-item h3 {
-      margin: 0 0 8px;
-      font-size: 1.02rem;
-      letter-spacing: -0.02em;
-    }
-
-    .faq-item p {
-      margin: 0;
-      color: var(--dark-muted);
-    }
-
-    .signup-shell {
-      background: linear-gradient(180deg, #211f38, #161624);
-      color: var(--text);
-      border-radius: 26px;
-      padding: 24px;
-      border: 1px solid rgba(252,251,249,0.1);
-      box-shadow: var(--shadow);
-    }
-
-    .signup-shell p {
-      color: var(--muted);
-      margin-top: 8px;
-      margin-bottom: 20px;
-    }
-
-    .signup-form {
-      display: grid;
-      gap: 12px;
-    }
-
-    .signup-form input {
-      width: 100%;
-      min-height: 50px;
-      border-radius: 14px;
-      border: 1px solid rgba(252,251,249,0.14);
-      background: rgba(252,251,249,0.08);
-      color: var(--text);
-      padding: 0 16px;
-      font-size: 1rem;
-    }
-
-    .signup-form input::placeholder { color: rgba(252,251,249,0.52); }
-
-    .micro {
-      font-size: 0.84rem;
-      color: var(--muted);
-    }
-
-    footer {
-      background: #11111a;
-      color: var(--muted);
-      padding: 42px 0 56px;
-    }
-
-    .footer-grid {
-      display: grid;
-      gap: 22px;
-      align-items: start;
-    }
-
-    .footer-brand {
-      display: grid;
-      gap: 14px;
-    }
-
-    .footer-brand img.footer-chair-logo {
-      width: 48px;
-      height: 48px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 8px rgba(210,180,140,0.3));
-    }
-
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px 18px;
-    }
-
-    .footer-links a {
-      color: var(--text);
-      text-decoration: none;
-    }
-
-    .footer-links a:hover { color: var(--accent-2); }
-
-    @media (min-width: 760px) {
-      .nav-links { display: flex; }
-      .hero { padding: 76px 0 94px; }
-      .hero-grid { grid-template-columns: 1.1fr 0.9fr; }
-      .shell-grid { grid-template-columns: 280px 1fr; }
-      .sidebar { border-right: 1px solid rgba(252,251,249,0.08); border-bottom: 0; }
-      .feature-slide-inner { grid-template-columns: 1fr 1fr; }
-      .pricing-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
-      .pricing-grid .price-card.featured { transform: translateY(-8px); }
-      .faq-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .signup-form { grid-template-columns: 1.5fr auto; }
-      .footer-grid { grid-template-columns: 1.1fr auto; justify-content: space-between; }
+    /* Hero gradient */
+    .hero-gradient {
+      background: radial-gradient(ellipse at top center, rgba(0, 212, 170, 0.08) 0%, transparent 60%),
+                  linear-gradient(180deg, #0a0a0f 0%, #0f0f1a 100%);
     }
   </style>
 </head>
-<body>
-  <header class="site-header">
-    <div class="wrap nav">
-      <a class="brand" href="#top"><img class="brand-logo" src="./chair-logo.png" alt="R3 chair logo" />The Construct</a>
-      <nav class="nav-links" aria-label="Primary">
-        <a href="#features">Features</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#faq">FAQ</a>
-      </nav>
-      <a class="btn btn-primary" href="#early-access">Get Early Access</a>
+
+<body class="bg-[#0a0a0f] text-[#e0e0e0] font-sans antialiased">
+
+  <!-- ============================================================ -->
+  <!-- 1. NAV BAR                                                   -->
+  <!-- ============================================================ -->
+  <nav class="fixed top-0 w-full z-50 backdrop-blur-lg bg-[#0a0a0f]/80 border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="#" class="flex items-center gap-2.5 text-white font-bold text-lg tracking-tight no-underline">
+          <img src="./chair-logo.png" alt="The Construct" class="w-8 h-8 object-contain">
+          The Construct
+        </a>
+
+        <span class="hidden lg:inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border border-accent/20 text-accent bg-accent/5">
+          Now in early access &middot; macOS &middot; Gateway-agnostic
+        </span>
+
+        <div class="hidden md:flex items-center gap-6">
+          <a href="#features" class="text-sm text-[#8a8a9a] hover:text-white transition no-underline">Features</a>
+          <a href="#pricing" class="text-sm text-[#8a8a9a] hover:text-white transition no-underline">Pricing</a>
+          <a href="#faq" class="text-sm text-[#8a8a9a] hover:text-white transition no-underline">FAQ</a>
+          <a href="#early-access" class="inline-flex items-center px-4 py-2 rounded-full bg-accent text-[#0a0a0f] text-sm font-semibold hover:bg-accent-hover transition no-underline">Get Early Access</a>
+        </div>
+
+        <a href="#early-access" class="md:hidden inline-flex items-center px-4 py-2 rounded-full bg-accent text-[#0a0a0f] text-sm font-semibold no-underline">Get Early Access</a>
+      </div>
     </div>
-  </header>
+  </nav>
 
-  <main id="top">
-    <section class="hero">
-      <div class="wrap hero-grid">
-        <div class="hero-copy">
-          <div class="eyebrow-row">
-            <span class="pill pill-built">Built for OpenClaw</span>
-            <span class="pill">macOS &middot; Windows &middot; Mobile</span>
-            <span class="mobile-callout"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>Works on mobile via Tailscale + PWA</span>
-          </div>
-          <h1>The Construct</h1>
-          <p class="hero-tagline">One screen. All your agents.</p>
-          <p>
-            A native desktop app that replaces terminal chaos with a single orchestration layer for all your OpenClaw agents.
+  <main>
+
+    <!-- ============================================================ -->
+    <!-- 2. HERO                                                      -->
+    <!-- ============================================================ -->
+    <section class="hero-gradient pt-32 pb-20 md:pt-40 md:pb-28">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+        <div class="fade-in">
+          <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border border-accent/20 text-accent bg-accent/5 mb-8">
+            Now in early access &middot; macOS &middot; Gateway-agnostic
+          </span>
+
+          <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[0.95] mb-6">
+            One prompt.<br>Full control.
+          </h1>
+
+          <p class="text-lg md:text-xl text-[#8a8a9a] max-w-2xl mx-auto mb-8 leading-relaxed">
+            A native desktop app that turns a detailed project brief into a coordinated fleet of AI agents &mdash; with a live task graph so you see everything and miss nothing.
           </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#early-access">Get Early Access</a>
-            <a class="btn btn-secondary" href="#pricing">See pricing</a>
+
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12">
+            <a href="#early-access" class="inline-flex items-center px-6 py-3 rounded-full bg-accent text-[#0a0a0f] font-semibold text-base hover:bg-accent-hover transition hover:-translate-y-0.5 no-underline">
+              Get Early Access
+            </a>
+            <a href="#how-it-works" class="inline-flex items-center px-6 py-3 rounded-full border border-white/10 text-[#e0e0e0] font-medium text-base hover:border-white/20 transition no-underline">
+              See How It Works ↓
+            </a>
           </div>
         </div>
 
-        <div style="display:grid; place-items:center; padding:24px 0;">
-          <img class="hero-logo" src="./chair-logo.png" alt="The Construct: R3 chair logo" />
-          <p class="hero-subtitle">Your agents already run on OpenClaw.<br />The Construct makes you the Architect.</p>
+        <!-- Hero screenshot placeholder -->
+        <div class="fade-in max-w-4xl mx-auto">
+          <div class="screenshot-placeholder aspect-video text-base">
+            Cockpit Task Graph &mdash; live dependency flow with gold lead node, green completions, lane-colored active work
+          </div>
+        </div>
+
+        <!-- Tagline bridge -->
+        <p class="fade-in text-sm text-[#6a6a7a] mt-8 max-w-xl mx-auto">
+          Works with OpenAI, Anthropic, Ollama, LM Studio, or any OpenAI-compatible endpoint. Bring the AI you already pay for.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 3. BEGINNERS TO EXPERTS (Involvement Levels)                 -->
+    <!-- ============================================================ -->
+    <section class="py-20 md:py-28 border-t border-white/5">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="fade-in text-center mb-14">
+          <h2 class="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">You decide how much you're involved.</h2>
+          <p class="text-[#8a8a9a] text-lg max-w-2xl mx-auto">Configurable involvement levels let you choose your operating mode. From hands-on to fully autonomous.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="fade-in bg-surface border border-surface-border rounded-xl p-6">
+            <div class="text-accent font-semibold text-sm uppercase tracking-wider mb-3">Hands-on</div>
+            <h3 class="text-white text-lg font-bold mb-2">Direct every step</h3>
+            <p class="text-[#8a8a9a] text-sm leading-relaxed">Full manual control. Review every output, guide every decision, steer the work exactly where you want it to go.</p>
+          </div>
+
+          <div class="fade-in bg-surface border border-surface-border rounded-xl p-6">
+            <div class="text-accent font-semibold text-sm uppercase tracking-wider mb-3">Balanced</div>
+            <h3 class="text-white text-lg font-bold mb-2">Get pulled in at checkpoints</h3>
+            <p class="text-[#8a8a9a] text-sm leading-relaxed">Agents work autonomously until they hit a blocker or checkpoint. The Decision Queue surfaces what needs your attention. Everything else runs.</p>
+          </div>
+
+          <div class="fade-in bg-surface border border-surface-border rounded-xl p-6">
+            <div class="text-accent font-semibold text-sm uppercase tracking-wider mb-3">Autonomous</div>
+            <h3 class="text-white text-lg font-bold mb-2">Set the brief, check in when you want</h3>
+            <p class="text-[#8a8a9a] text-sm leading-relaxed">Approve the plan and let the fleet execute. Continuation rules keep agents moving. Operate like a CEO of your projects, not a babysitter.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="block dark" style="padding: 48px 0 64px;">
-      <div class="wrap" style="max-width: 960px;">
-        <div class="window-chrome">
-          <div class="window-titlebar">
-            <span class="window-dot"></span>
-            <span class="window-dot"></span>
-            <span class="window-dot"></span>
-          </div>
-          <img src="./screenshot-orchestration.png" alt="Orchestration plan cards showing agent assignments and approval gate" loading="lazy" width="1200" />
-        </div>
-        <p style="text-align:center; margin:20px 0 0; color:var(--muted); font-size:1.08rem; font-weight:500; line-height:1.5;">Describe what you need. Approve the plan. Watch your agents execute.</p>
-      </div>
-    </section>
+    <!-- ============================================================ -->
+    <!-- 4. FEATURE HEADER                                            -->
+    <!-- 5. FEATURE CARDS (8, 2-column grid)                          -->
+    <!-- ============================================================ -->
+    <section id="features" class="py-20 md:py-28 border-t border-white/5">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
 
-    <section class="block light" id="features">
-      <div class="wrap">
-        <div class="section-head">
-          <div class="kicker">What it does</div>
-          <h2>Not a chat wrapper. An orchestration layer.</h2>
-          <p>
-            There are other desktop tools for OpenClaw. The Construct is for people running multiple agents across multiple projects who need orchestration, not just a dashboard.
+        <!-- Feature header -->
+        <div class="fade-in text-center mb-16">
+          <p class="text-accent font-semibold text-sm uppercase tracking-wider mb-4">What it does</p>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight max-w-3xl mx-auto leading-tight">
+            Not monitoring what happened.<br>Orchestrating what happens next.
+          </h2>
+          <p class="text-[#8a8a9a] text-lg max-w-2xl mx-auto mt-6">
+            Other tools watch your agents. The Construct coordinates them &mdash; plans the work, dispatches the briefs, manages dependencies, surfaces decisions, and keeps the project moving forward.
           </p>
         </div>
 
-        <div class="carousel" data-interval="8000">
-          <div class="carousel-track">
+        <!-- 8 Feature cards -->
+        <div class="grid md:grid-cols-2 gap-5">
 
-            <div class="carousel-slide">
-              <div class="feature-slide-inner">
-                <div class="feature-slide-text">
-                  <div class="tag">Dashboard</div>
-                  <h3>See the whole system at once</h3>
-                  <p>One command center for agent status, lane assignments, active threads, project context, and what's running now. No tab juggling. No terminal archaeology.</p>
-                </div>
-                <div class="feature-slide-screenshot"><img src="./screenshot-hero.png" alt="The Construct dashboard" loading="lazy" /></div>
-              </div>
-            </div>
-
-            <div class="carousel-slide">
-              <div class="feature-slide-inner">
-                <div class="feature-slide-text">
-                  <div class="tag">Session Persistence</div>
-                  <h3>Bring your existing setup with you</h3>
-                  <p>Your agents already run on OpenClaw. The Construct reads what you already have, keeps session history intact, and makes adoption feel like stepping into a cockpit.</p>
-                </div>
-                <div class="feature-slide-screenshot"><img src="./screenshot-hero.png" alt="Session persistence in sidebar" loading="lazy" /></div>
-              </div>
-            </div>
-
-            <div class="carousel-slide">
-              <div class="feature-slide-inner">
-                <div class="feature-slide-text">
-                  <div class="tag">5-lane framework</div>
-                  <h3>Structure that keeps agents coherent</h3>
-                  <p>SYSTEM, BUILD, CONTENT, DESIGN, and OPS: with Operator, Tank, Link, Mouse, and Trinity as the default lineup. Every message lands in the right lane with the right project header.</p>
-                </div>
-                <div class="feature-slide-screenshot"><img src="./screenshot-mobile.png" alt="5-lane framework in sidebar" loading="lazy" /></div>
-              </div>
-            </div>
-
-            <div class="carousel-slide">
-              <div class="feature-slide-inner">
-                <div class="feature-slide-text">
-                  <div class="tag">Orchestration</div>
-                  <h3>The differentiator</h3>
-                  <p>Describe what you need. The system drafts a plan: which agents, what order, what dependencies. You approve before execution. You stay in control without doing the coordination manually.</p>
-                </div>
-                <div class="feature-slide-screenshot"><img src="./screenshot-orchestration.png" alt="Orchestration plan cards" loading="lazy" /></div>
-              </div>
-            </div>
-
-            <div class="carousel-slide">
-              <div class="feature-slide-inner">
-                <div class="feature-slide-text">
-                  <div class="tag">Context meter</div>
-                  <h3>See session health before it becomes a problem</h3>
-                  <p>The context meter makes token pressure visible so you can steer proactively instead of guessing when a thread is getting heavy or close to the edge.</p>
-                </div>
-                <div class="feature-slide-screenshot"><img src="./screenshot-hero.png" alt="Context meter at bottom of dashboard" loading="lazy" /></div>
-              </div>
-            </div>
-
-            <div class="carousel-slide">
-              <div class="feature-slide-inner">
-                <div class="feature-slide-text">
-                  <div class="tag">Auto-wrap + transfer</div>
-                  <h3>Keep work moving without manual babysitting</h3>
-                  <p>Auto-wrap and transfer help work continue cleanly when a session needs to roll forward. Instead of losing momentum, you preserve continuity and hand off the next move with context attached.</p>
-                </div>
-                <div class="feature-slide-screenshot"><img src="./screenshot-hero.png" alt="Auto-wrap and transfer controls" loading="lazy" /></div>
-              </div>
-            </div>
-
-            <div class="carousel-slide">
-              <div class="feature-slide-inner">
-                <div class="feature-slide-text">
-                  <div class="tag">Mobile access</div>
-                  <h3>Check in without sitting at the desk</h3>
-                  <p>Use Tailscale + PWA access to check on running work, review the system state, and stay close to your agent fleet from your phone when you're away.</p>
-                </div>
-                <div class="feature-slide-screenshot"><img src="./screenshot-mobile.png" alt="Mobile PWA view" loading="lazy" /></div>
-              </div>
-            </div>
-
+          <!-- Card 1: Orchestration -->
+          <div class="fade-in bg-surface border border-surface-border rounded-xl p-6 md:p-8">
+            <span class="inline-flex px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent mb-4">Core</span>
+            <div class="screenshot-placeholder aspect-video mb-5">Orchestration plan &mdash; agent assignments, dependency order, approval gate</div>
+            <h3 class="text-white text-xl font-bold mb-1">Orchestration</h3>
+            <p class="text-accent text-sm font-medium mb-3">The differentiator.</p>
+            <p class="text-[#8a8a9a] text-sm leading-relaxed">Describe what you need. The system drafts a plan: which agents, what order, what dependencies. You approve before execution. You stay in control without doing the coordination manually.</p>
           </div>
-          <div class="carousel-controls">
-            <button class="carousel-nav prev" aria-label="Previous">&larr;</button>
-            <div class="carousel-dots">
-              <button class="carousel-dot active" aria-label="Slide 1"></button>
-              <button class="carousel-dot" aria-label="Slide 2"></button>
-              <button class="carousel-dot" aria-label="Slide 3"></button>
-              <button class="carousel-dot" aria-label="Slide 4"></button>
-              <button class="carousel-dot" aria-label="Slide 5"></button>
-              <button class="carousel-dot" aria-label="Slide 6"></button>
-              <button class="carousel-dot" aria-label="Slide 7"></button>
-            </div>
-            <button class="carousel-nav next" aria-label="Next">&rarr;</button>
+
+          <!-- Card 2: The Cockpit -->
+          <div class="fade-in bg-surface border border-surface-border rounded-xl p-6 md:p-8">
+            <span class="inline-flex px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent mb-4">Visibility</span>
+            <div class="screenshot-placeholder aspect-video mb-5">Task Graph &mdash; gold glow lead node, green completions, lane-colored active work</div>
+            <h3 class="text-white text-xl font-bold mb-1">The Cockpit</h3>
+            <p class="text-accent text-sm font-medium mb-3">See everything. Miss nothing.</p>
+            <p class="text-[#8a8a9a] text-sm leading-relaxed">Three zoom levels of visibility into your projects. The Task Graph shows a live directed dependency flow &mdash; gold glow on the lead node, green as tasks complete, lane-colored pulses on active work. Minimap, zoom, pan, lane filters. Click any node to see details and jump into the agent's conversation. Zoom out to Project View for a card grid across all your projects. Zoom out further to System View &mdash; your full agent fleet, provider health, and global stats. Mission control for everything you're running. Auto-refreshes every five seconds. The graph is alive.</p>
           </div>
+
+          <!-- Card 3: Decision Queue -->
+          <div class="fade-in bg-surface border border-surface-border rounded-xl p-6 md:p-8">
+            <span class="inline-flex px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent mb-4">Control</span>
+            <div class="screenshot-placeholder aspect-video mb-5">Decision Queue &mdash; BLOCKED card with context and action buttons</div>
+            <h3 class="text-white text-xl font-bold mb-1">Decision Queue</h3>
+            <p class="text-accent text-sm font-medium mb-3">You will get pulled in. But only when it matters.</p>
+            <p class="text-[#8a8a9a] text-sm leading-relaxed">Agents work autonomously using configurable continuation rules &mdash; keyword detection, turn counting, involvement levels. The machine runs until it can't. When an agent hits BLOCKED or reaches a CHECKPOINT, a Decision Queue card appears. It tells you what's needed and why. You make the call, work resumes. No notification spam. No "here's what I'm going to do next" updates. Just the decisions that actually need a human. Get notified on mobile when you're away from the desk. Step in, decide, step out.</p>
+          </div>
+
+          <!-- Card 4: Context Meter -->
+          <div class="fade-in bg-surface border border-surface-border rounded-xl p-6 md:p-8">
+            <span class="inline-flex px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent mb-4">Resilience</span>
+            <div class="screenshot-placeholder aspect-video mb-5">Thread view &mdash; Context Meter bar + Wrap Session button</div>
+            <h3 class="text-white text-xl font-bold mb-1">Context Meter + Wrap and Transfer</h3>
+            <p class="text-accent text-sm font-medium mb-3">The context crash killer.</p>
+            <p class="text-[#8a8a9a] text-sm leading-relaxed">Every thread shows token usage in real time. You can see exactly how close you are to the edge &mdash; before the AI starts forgetting. When you're running hot, the Wrap and Transfer protocol packages your full session state &mdash; decisions made, work completed, open items, carry-forward context &mdash; and moves it losslessly into a new thread. No starting over. No "as I mentioned earlier." No lost momentum. This is the feature that saves projects other tools let die.</p>
+          </div>
+
+          <!-- Card 5: Project Intelligence -->
+          <div class="fade-in bg-surface border border-surface-border rounded-xl p-6 md:p-8">
+            <span class="inline-flex px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent mb-4">Intelligence</span>
+            <div class="screenshot-placeholder aspect-video mb-5">IntelligenceBar + Architect response in slide-over panel</div>
+            <h3 class="text-white text-xl font-bold mb-1">Project Intelligence</h3>
+            <p class="text-accent text-sm font-medium mb-3">Ask your project a question.</p>
+            <p class="text-[#8a8a9a] text-sm leading-relaxed">The Architect sees everything your agents have found across every thread. Ask "what did the content team find about venue options?" and get a synthesized answer &mdash; not a link to a thread, an actual answer with context from across the entire project. For orchestrated projects, The Architect knows the plan, the task graph, and all agent findings. For manual projects, Morpheus provides cross-thread intelligence and pattern recognition. Every message gets fresh context &mdash; assembled in real time from your actual project data. A Context Inspector shows you exactly which threads were analyzed and how the token budget was allocated. Full transparency.</p>
+          </div>
+
+          <!-- Card 6: Autonomous Continuation -->
+          <div class="fade-in bg-surface border border-surface-border rounded-xl p-6 md:p-8">
+            <span class="inline-flex px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent mb-4">Autonomy</span>
+            <div class="screenshot-placeholder aspect-video mb-5">Continuation rules &mdash; keyword detection, turn counting, involvement levels</div>
+            <h3 class="text-white text-xl font-bold mb-1">Autonomous Continuation</h3>
+            <p class="text-accent text-sm font-medium mb-3">The machine runs until it can't.</p>
+            <p class="text-[#8a8a9a] text-sm leading-relaxed">When an agent hits a blocker or reaches a checkpoint, the Decision Queue surfaces a card. You make the call. Work continues. You will get pulled in &mdash; but only when it matters. What it promises: one prompt and you're in control.</p>
+          </div>
+
+          <!-- Card 7: 5-Lane Framework -->
+          <div class="fade-in bg-surface border border-surface-border rounded-xl p-6 md:p-8">
+            <span class="inline-flex px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent mb-4">Structure</span>
+            <div class="screenshot-placeholder aspect-video mb-5">Sidebar &mdash; five lanes: SYSTEM, BUILD, CONTENT, DESIGN, OPS with agent assignments</div>
+            <h3 class="text-white text-xl font-bold mb-1">5-Lane Framework</h3>
+            <p class="text-accent text-sm font-medium mb-3">Structure that keeps agents coherent.</p>
+            <p class="text-[#8a8a9a] text-sm leading-relaxed">SYSTEM, BUILD, CONTENT, DESIGN, and OPS &mdash; with Operator, Tank, Link, Mouse, and Trinity as the default lineup. Every message lands in the right lane with the right project header.</p>
+          </div>
+
+          <!-- Card 8: Personality System -->
+          <div class="fade-in bg-surface border border-surface-border rounded-xl p-6 md:p-8">
+            <span class="inline-flex px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent mb-4">Yours</span>
+            <div class="screenshot-placeholder aspect-video mb-5">Settings &mdash; personality slider: Off, Lite, Medium, There Is No Spoon</div>
+            <h3 class="text-white text-xl font-bold mb-1">Personality System</h3>
+            <p class="text-accent text-sm font-medium mb-3">Make it yours.</p>
+            <p class="text-[#8a8a9a] text-sm leading-relaxed">A four-level personality slider: Off (corporate clean), Lite (a little warmth), Medium (the sweet spot), and There Is No Spoon (full Matrix flavor). 173 UI strings that change based on your setting &mdash; from status messages to agent dispatch preambles to toast notifications. It's a small thing. But it makes the app feel like yours, not like another generic SaaS dashboard.</p>
+          </div>
+
         </div>
-
       </div>
     </section>
 
-    <section class="block dark">
-      <div class="wrap">
-        <div class="section-head">
-          <div class="kicker">See it in action</div>
+    <!-- ============================================================ -->
+    <!-- 6. SCREENSHOT CAROUSEL (5 slides, CSS scroll-snap)           -->
+    <!-- ============================================================ -->
+    <section class="py-20 md:py-28 border-t border-white/5">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="fade-in text-center mb-10">
+          <p class="text-accent font-semibold text-sm uppercase tracking-wider mb-4">See it in action</p>
+          <h2 class="text-3xl md:text-4xl font-bold text-white tracking-tight">Screenshots</h2>
         </div>
 
-        <div class="carousel" data-interval="10000">
-          <div class="carousel-track">
-
-            <div class="carousel-slide">
-              <div class="window-chrome">
-                <div class="window-titlebar">
-                  <span class="window-dot"></span>
-                  <span class="window-dot"></span>
-                  <span class="window-dot"></span>
-                </div>
-                <img src="./screenshot-hero.png" alt="The Construct: full app window with Matrix-themed conversation across multiple agent lanes" loading="lazy" width="1200" />
-              </div>
-              <div class="screenshot-slide-caption">
-                <strong>Hero shot</strong>
-                <p>Five lanes. Five agents. One conversation that started it all. "What is the essence of the Matrix?" and the answer describes exactly what you're looking at.</p>
-              </div>
+        <div class="carousel-scroll">
+          <!-- Slide 1 -->
+          <div class="carousel-slide">
+            <div class="screenshot-placeholder aspect-video text-sm mb-3">
+              Cockpit Task Graph &mdash; full BlownPDX graph with glow effects
             </div>
-
-            <div class="carousel-slide">
-              <div class="window-chrome">
-                <div class="window-titlebar">
-                  <span class="window-dot"></span>
-                  <span class="window-dot"></span>
-                  <span class="window-dot"></span>
-                </div>
-                <img src="./screenshot-orchestration.png" alt="Orchestration plan with 3 task cards assigned to Tank, Link, and Trinity agents with approval gate" loading="lazy" width="1200" />
-              </div>
-              <div class="screenshot-slide-caption">
-                <strong>Orchestration view</strong>
-                <p>Three agents. Three lanes. One approval gate. You see the plan before anything runs.</p>
-              </div>
-            </div>
-
-            <div class="carousel-slide">
-              <div class="window-chrome">
-                <div class="window-titlebar">
-                  <span class="window-dot"></span>
-                  <span class="window-dot"></span>
-                  <span class="window-dot"></span>
-                </div>
-                <img src="./screenshot-mobile.png" alt="Multi-lane sidebar showing all 5 agent lanes with active sessions" loading="lazy" width="1200" />
-              </div>
-              <div class="screenshot-slide-caption">
-                <strong>Multi-lane sidebar</strong>
-                <p>SYSTEM, BUILD, CONTENT, DESIGN, OPS: every thread lands in the right lane. No tab juggling. No lost context.</p>
-              </div>
-            </div>
-
+            <p class="text-white font-semibold text-sm">Task Graph</p>
+            <p class="text-[#6a6a7a] text-xs">Live dependency flow. Gold lead node, green completions, lane-colored active work.</p>
           </div>
-          <div class="carousel-controls">
-            <button class="carousel-nav prev" aria-label="Previous">&larr;</button>
-            <div class="carousel-dots">
-              <button class="carousel-dot active" aria-label="Slide 1"></button>
-              <button class="carousel-dot" aria-label="Slide 2"></button>
-              <button class="carousel-dot" aria-label="Slide 3"></button>
+
+          <!-- Slide 2 -->
+          <div class="carousel-slide">
+            <div class="screenshot-placeholder aspect-video text-sm mb-3">
+              Orchestration plan &mdash; three agents, three lanes, one approval gate
             </div>
-            <button class="carousel-nav next" aria-label="Next">&rarr;</button>
+            <p class="text-white font-semibold text-sm">Orchestration</p>
+            <p class="text-[#6a6a7a] text-xs">You see the plan before anything runs. Approve, modify, or reject.</p>
+          </div>
+
+          <!-- Slide 3 -->
+          <div class="carousel-slide">
+            <div class="screenshot-placeholder aspect-video text-sm mb-3">
+              System View &mdash; agent fleet, provider health, global stats
+            </div>
+            <p class="text-white font-semibold text-sm">System View</p>
+            <p class="text-[#6a6a7a] text-xs">Mission control for everything you're running.</p>
+          </div>
+
+          <!-- Slide 4 -->
+          <div class="carousel-slide">
+            <div class="screenshot-placeholder aspect-video text-sm mb-3">
+              Multi-lane sidebar &mdash; SYSTEM, BUILD, CONTENT, DESIGN, OPS
+            </div>
+            <p class="text-white font-semibold text-sm">5-Lane Sidebar</p>
+            <p class="text-[#6a6a7a] text-xs">Every thread lands in the right lane. No tab juggling. No lost context.</p>
+          </div>
+
+          <!-- Slide 5 -->
+          <div class="carousel-slide">
+            <div class="screenshot-placeholder aspect-video text-sm mb-3">
+              Mobile PWA &mdash; check in from anywhere via Tailscale
+            </div>
+            <p class="text-white font-semibold text-sm">Mobile Access</p>
+            <p class="text-[#6a6a7a] text-xs">Check on running work from your phone. Decision Queue on the go.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="block light" id="pricing">
-      <div class="wrap">
-        <div class="section-head">
-          <div class="kicker">Pricing</div>
-          <h2>Simple tiers. Real capability jumps.</h2>
-          <p>The Construct is the orchestration layer on top of OpenClaw. You bring your own model access. Pricing is for the cockpit, persistence, and orchestration layer — not a second tax on tokens.</p>
+    <!-- ============================================================ -->
+    <!-- 7. STORY TREATMENT: BlownPDX "How It Works"                  -->
+    <!-- ============================================================ -->
+    <section id="how-it-works" class="py-20 md:py-28 border-t border-white/5 bg-[#0c0c16]">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6">
+        <div class="fade-in">
+          <p class="text-accent font-semibold text-sm uppercase tracking-wider mb-4">How it works</p>
+          <h2 class="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">From idea to structured execution in one session.</h2>
+          <p class="text-[#8a8a9a] text-lg leading-relaxed mb-8">
+            Desi runs a custom balloonscape business in Portland. She wanted to expand into a new concept &mdash; a Balloon Bar where customers build their own arrangements online, choose from DIY to full-service tiers, and get everything shipped or ready for pickup.
+          </p>
+
+          <!-- Expand toggle -->
+          <button id="story-toggle" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-accent/30 text-accent text-sm font-semibold hover:bg-accent/5 transition mb-8" onclick="toggleStory()">
+            <span id="story-toggle-text">Read the full story</span>
+            <svg id="story-toggle-icon" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+
+          <!-- Collapsible 7-beat story -->
+          <div id="story-beats" class="story-beats">
+
+            <!-- Beat 1 (25% sentinel) -->
+            <div class="mb-8 pl-6 border-l-2 border-accent/20" data-story-sentinel="25">
+              <p class="text-[#8a8a9a] leading-relaxed">
+                That's not a one-line prompt. That's a real business brief &mdash; pricing strategy, competitive positioning, brand extension questions, website platform decisions, fulfillment workflows, inventory tracking, and a launch plan.
+              </p>
+            </div>
+
+            <!-- Beat 2 -->
+            <div class="mb-8 pl-6 border-l-2 border-accent/20">
+              <p class="text-[#8a8a9a] leading-relaxed">
+                The Construct's Architect parsed that brief into a dependency graph: seven tasks across five lanes. Research feeding into branding feeding into website design, with event planning and operations running in parallel.
+              </p>
+            </div>
+
+            <!-- Beat 3 (50% sentinel) -->
+            <div class="mb-8 pl-6 border-l-2 border-accent/20" data-story-sentinel="50">
+              <p class="text-[#8a8a9a] leading-relaxed">
+                Tank pulled double duty on pricing and website architecture. Trinity handled the business model and the 90-day launch playbook.
+              </p>
+            </div>
+
+            <!-- Beat 4 -->
+            <div class="mb-8 pl-6 border-l-2 border-accent/20">
+              <p class="text-[#8a8a9a] leading-relaxed">
+                Link mapped the competitive landscape. Mouse built the visual merchandising system.
+              </p>
+            </div>
+
+            <!-- Beat 5 (75% sentinel) -->
+            <div class="mb-8 pl-6 border-l-2 border-accent/20" data-story-sentinel="75">
+              <p class="text-[#8a8a9a] leading-relaxed">
+                Desi watched the Cockpit task graph light up as work moved through the pipeline.
+              </p>
+            </div>
+
+            <!-- Beat 6 -->
+            <div class="mb-8 pl-6 border-l-2 border-accent/20">
+              <p class="text-white text-lg font-medium leading-relaxed">
+                Her reaction wasn't "cool tech." It was "wait &mdash; that's actually getting done?"
+              </p>
+            </div>
+
+            <!-- Beat 7 (100% sentinel) -->
+            <div class="mb-8 pl-6 border-l-2 border-accent/30" data-story-sentinel="100">
+              <p class="text-[#8a8a9a] leading-relaxed">
+                Within one session: synthesized venue research, brand direction, website structure, three-tier pricing model, and a launch timeline. Not finished. Structured. Ready for her to make decisions and push forward.
+              </p>
+            </div>
+
+            <!-- Screenshot placeholder -->
+            <div class="screenshot-placeholder aspect-video mb-8 text-sm">
+              Cockpit Task Graph &mdash; BlownPDX project, gold lead node, green completions, lane-colored running nodes
+            </div>
+
+            <!-- In-story CTAs -->
+            <div class="flex flex-col sm:flex-row gap-3">
+              <a href="#early-access" class="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-accent text-[#0a0a0f] font-semibold text-sm hover:bg-accent-hover transition no-underline" onclick="plausible('Story CTA', { props: { label: 'early-access', position: 'in-story' } })">
+                Get Early Access
+              </a>
+              <a href="#pricing" class="inline-flex items-center justify-center px-5 py-2.5 rounded-full border border-white/10 text-[#e0e0e0] font-medium text-sm hover:border-white/20 transition no-underline" onclick="plausible('Story CTA', { props: { label: 'pricing', position: 'in-story' } })">
+                See Pricing
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 8. PRICING                                                   -->
+    <!-- ============================================================ -->
+    <section id="pricing" class="py-20 md:py-28 border-t border-white/5">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="fade-in text-center mb-14">
+          <p class="text-accent font-semibold text-sm uppercase tracking-wider mb-4">Pricing</p>
+          <h2 class="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">Start free. Stay in control.</h2>
+          <p class="text-[#8a8a9a] text-lg max-w-2xl mx-auto">14-day free trial. Full access. No credit card required. After the trial, your data stays &mdash; you just can't run new agents until you subscribe.</p>
         </div>
 
-        <div class="pricing-grid">
-          <article class="price-card">
-            <div class="price-top">
-              <div>
-                <h3 class="price-name">Blue Pill</h3>
-                <p class="price-copy">Get started with a single agent. No account required.</p>
-              </div>
-              <div class="price-amount">$0<span>Free</span></div>
+        <div class="grid md:grid-cols-3 gap-6 items-start">
+
+          <!-- Founding Member -->
+          <div class="fade-in bg-surface border-2 border-accent/30 rounded-xl p-6 md:p-8 relative">
+            <span class="absolute -top-3 left-6 inline-flex px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-accent text-[#0a0a0f]">Limited &mdash; first 100</span>
+            <h3 class="text-white text-xl font-bold mb-1 mt-2">Founding Member</h3>
+            <p class="text-[#8a8a9a] text-sm mb-4">Same full access as Operator, permanently discounted. A thank-you to the people who believed early.</p>
+            <div class="flex items-baseline gap-1 mb-6">
+              <span class="text-4xl font-black text-white">$15</span>
+              <span class="text-[#6a6a7a] text-sm">/month &mdash; locked forever</span>
             </div>
-            <ul class="price-list">
-              <li>One agent</li>
-              <li>10 stored sessions</li>
-              <li>Basic session management</li>
-              <li>Single lane only</li>
-              <li>No mobile access</li>
-              <li>Community support</li>
+            <a href="https://buy.stripe.com/8x2eVeflofH8euLeYc5wI02" class="flex items-center justify-center w-full px-5 py-3 rounded-full bg-accent text-[#0a0a0f] font-semibold text-sm hover:bg-accent-hover transition no-underline">Claim Founding Rate</a>
+          </div>
+
+          <!-- Operator -->
+          <div class="fade-in bg-surface border border-surface-border rounded-xl p-6 md:p-8">
+            <h3 class="text-white text-xl font-bold mb-1">Operator</h3>
+            <p class="text-[#8a8a9a] text-sm mb-4">Everything in The Construct.</p>
+            <div class="flex items-baseline gap-1 mb-2">
+              <span class="text-4xl font-black text-white">$19</span>
+              <span class="text-[#6a6a7a] text-sm">/month</span>
+            </div>
+            <p class="text-[#6a6a7a] text-xs mb-6">or $180/year (save 21%)</p>
+            <div class="flex flex-col gap-2 mb-6">
+              <a href="https://buy.stripe.com/14A8wQ1uy66y3Q76rG5wI03" class="flex items-center justify-center w-full px-5 py-3 rounded-full bg-white/10 text-white font-semibold text-sm hover:bg-white/15 transition no-underline">Subscribe Monthly</a>
+              <a href="https://buy.stripe.com/00waEY1uy1QiaevcQ45wI04" class="flex items-center justify-center w-full px-5 py-2.5 rounded-full border border-white/10 text-[#8a8a9a] font-medium text-xs hover:border-white/20 transition no-underline">Subscribe Annually &mdash; Save 21%</a>
+            </div>
+            <ul class="space-y-2 text-sm text-[#8a8a9a]">
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Unlimited agents and sessions</li>
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> All 5 lanes: SYSTEM, BUILD, CONTENT, DESIGN, OPS</li>
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Cockpit: Task Graph, Project View, System View</li>
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Orchestration with Architect plan generation</li>
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Decision Queue</li>
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Project Intelligence (Architect + Morpheus)</li>
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Context Meter + Wrap and Transfer</li>
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Skill System</li>
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Personality System (4 levels)</li>
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Mobile access via Tailscale</li>
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Push notifications</li>
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Gateway-agnostic (any OpenAI-compatible provider)</li>
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Local data, AES-256 encryption</li>
             </ul>
-          </article>
-
-          <article class="price-card featured">
-            <div class="featured-label">Recommended</div>
-            <div class="price-top">
-              <div>
-                <h3 class="price-name">Red Pill</h3>
-                <p class="price-copy">Full multi-agent orchestration. $15/mo billed annually.</p>
-              </div>
-              <div class="price-amount">$19<span>/ month</span></div>
-            </div>
-            <ul class="price-list">
-              <li>Unlimited agents</li>
-              <li>Unlimited session history</li>
-              <li>All 5 lanes: SYSTEM, BUILD, CONTENT, DESIGN, OPS</li>
-              <li>Orchestration with approval gates</li>
-              <li>Mobile access</li>
-              <li>Personality system</li>
-              <li>Claude CLI + OpenClaw gateway</li>
-              <li>Priority support</li>
-            </ul>
-          </article>
-
-          <article class="price-card">
-            <div class="price-top">
-              <div>
-                <h3 class="price-name">Nebuchadnezzar</h3>
-                <p class="price-copy">For teams running shared agent fleets. Coming soon.</p>
-              </div>
-              <div class="price-amount">Contact<span>Team</span></div>
-            </div>
-            <ul class="price-list">
-              <li>Everything in Red Pill</li>
-              <li>Shared configurations</li>
-              <li>Team visibility</li>
-              <li>Admin controls</li>
-              <li>Centralized billing</li>
-              <li>Dedicated support</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="block light" id="faq">
-      <div class="wrap">
-        <div class="section-head">
-          <div class="kicker">FAQ</div>
-          <h2>What people need to know before they jump in.</h2>
-        </div>
-
-        <div class="faq-grid">
-          <article class="faq-item">
-            <h3>Do I need my own OpenClaw setup?</h3>
-            <p>Yes. The Construct connects to your existing OpenClaw gateway. It doesn't include LLM access — you bring your own Claude Max subscription, API keys, or other model providers.</p>
-          </article>
-          <article class="faq-item">
-            <h3>Can I use The Construct with non-Claude models?</h3>
-            <p>Yes. Claude models route through the CLI binary. Non-Claude models route through the OpenClaw gateway. Both work seamlessly.</p>
-          </article>
-          <article class="faq-item">
-            <h3>What happens when my free sessions fill up?</h3>
-            <p>Your oldest sessions are archived, not deleted. You can upgrade to Red Pill for unlimited history, or manually clear sessions to free up space.</p>
-          </article>
-          <article class="faq-item">
-            <h3>Can I cancel anytime?</h3>
-            <p>Yes. No contracts. Cancel from your account and you'll revert to Blue Pill at the end of your billing period. Your session data stays — nothing is deleted.</p>
-          </article>
-          <article class="faq-item">
-            <h3>Is there a student or open-source discount?</h3>
-            <p>Email us. We're happy to work something out for students and active open-source contributors.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="block dark" id="early-access">
-      <div class="wrap">
-        <div class="signup-shell">
-          <div class="section-head" style="margin-bottom:18px; max-width:none;">
-            <div class="kicker">Early access</div>
-            <h2>Get early access to The Construct.</h2>
-            <p>Join the early access list. Launch updates, early access, and the occasional field note from the build.</p>
           </div>
 
-          <form class="signup-form" action="https://buttondown.com/api/emails/embed-subscribe/theconstruct" method="post" target="popupwindow">
-            <input type="email" name="email" placeholder="Enter your email" aria-label="Email address" required />
-            <button class="btn btn-primary" type="submit">Get Early Access</button>
+          <!-- Nebuchadnezzar (Team) -->
+          <div class="fade-in bg-surface border border-surface-border rounded-xl p-6 md:p-8">
+            <h3 class="text-white text-xl font-bold mb-1">Nebuchadnezzar</h3>
+            <p class="text-[#8a8a9a] text-sm mb-4">For teams running shared agent fleets.</p>
+            <div class="flex items-baseline gap-1 mb-6">
+              <span class="text-2xl font-bold text-white">Coming Soon</span>
+            </div>
+            <a href="#early-access" class="flex items-center justify-center w-full px-5 py-3 rounded-full border border-white/10 text-[#e0e0e0] font-medium text-sm hover:border-white/20 transition no-underline">Join Waitlist</a>
+            <ul class="space-y-2 text-sm text-[#8a8a9a] mt-6">
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Everything in Operator</li>
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Shared agent configurations</li>
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Team visibility and admin controls</li>
+              <li class="flex items-start gap-2"><span class="text-accent mt-0.5">&#10003;</span> Centralized billing</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 9. FAQ (6 questions, accordion)                              -->
+    <!-- ============================================================ -->
+    <section id="faq" class="py-20 md:py-28 border-t border-white/5">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6">
+        <div class="fade-in text-center mb-14">
+          <p class="text-accent font-semibold text-sm uppercase tracking-wider mb-4">FAQ</p>
+          <h2 class="text-3xl md:text-4xl font-bold text-white tracking-tight">Questions before you jump in.</h2>
+        </div>
+
+        <div class="space-y-3">
+
+          <!-- FAQ 1 -->
+          <div class="faq-item fade-in bg-surface border border-surface-border rounded-xl overflow-hidden">
+            <button class="faq-trigger w-full flex items-center justify-between p-5 text-left cursor-pointer" onclick="toggleFaq(this)">
+              <span class="text-white font-semibold text-sm pr-4">Do I need a specific AI provider?</span>
+              <svg class="faq-chevron w-5 h-5 text-[#6a6a7a] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p class="px-5 pb-5 text-[#8a8a9a] text-sm leading-relaxed">No. The Construct works with any OpenAI-compatible endpoint &mdash; OpenAI, Anthropic, Ollama, LM Studio, OpenClaw, or direct API keys. You bring whatever AI you already use. Claude models can also route through the Claude CLI if you have a Claude Max subscription.</p>
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="faq-item fade-in bg-surface border border-surface-border rounded-xl overflow-hidden">
+            <button class="faq-trigger w-full flex items-center justify-between p-5 text-left cursor-pointer" onclick="toggleFaq(this)">
+              <span class="text-white font-semibold text-sm pr-4">What happens after the 14-day trial?</span>
+              <svg class="faq-chevron w-5 h-5 text-[#6a6a7a] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p class="px-5 pb-5 text-[#8a8a9a] text-sm leading-relaxed">Your data stays. You can still see your projects, threads, and history. You just can't run new agent sessions until you subscribe. Export is available before expiration.</p>
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="faq-item fade-in bg-surface border border-surface-border rounded-xl overflow-hidden">
+            <button class="faq-trigger w-full flex items-center justify-between p-5 text-left cursor-pointer" onclick="toggleFaq(this)">
+              <span class="text-white font-semibold text-sm pr-4">Is my data stored in the cloud?</span>
+              <svg class="faq-chevron w-5 h-5 text-[#6a6a7a] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p class="px-5 pb-5 text-[#8a8a9a] text-sm leading-relaxed">No. The Construct is a native desktop app. Your data lives in a local SQLite database on your machine. API keys are encrypted with AES-256. Nothing leaves your computer.</p>
+            </div>
+          </div>
+
+          <!-- FAQ 4 -->
+          <div class="faq-item fade-in bg-surface border border-surface-border rounded-xl overflow-hidden">
+            <button class="faq-trigger w-full flex items-center justify-between p-5 text-left cursor-pointer" onclick="toggleFaq(this)">
+              <span class="text-white font-semibold text-sm pr-4">Can I cancel anytime?</span>
+              <svg class="faq-chevron w-5 h-5 text-[#6a6a7a] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p class="px-5 pb-5 text-[#8a8a9a] text-sm leading-relaxed">Yes. No contracts. Cancel from your account and you keep access through the end of your billing period.</p>
+            </div>
+          </div>
+
+          <!-- FAQ 5 -->
+          <div class="faq-item fade-in bg-surface border border-surface-border rounded-xl overflow-hidden">
+            <button class="faq-trigger w-full flex items-center justify-between p-5 text-left cursor-pointer" onclick="toggleFaq(this)">
+              <span class="text-white font-semibold text-sm pr-4">What's the difference between this and other AI dashboards?</span>
+              <svg class="faq-chevron w-5 h-5 text-[#6a6a7a] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p class="px-5 pb-5 text-[#8a8a9a] text-sm leading-relaxed">Most AI dashboards monitor what already happened &mdash; they show logs, token usage, conversation history. The Construct orchestrates what happens next. It generates plans, dispatches agents to parallel threads, manages dependencies, surfaces decisions, and provides project-level intelligence across all your work. It's a control layer, not a viewing layer.</p>
+            </div>
+          </div>
+
+          <!-- FAQ 6 -->
+          <div class="faq-item fade-in bg-surface border border-surface-border rounded-xl overflow-hidden">
+            <button class="faq-trigger w-full flex items-center justify-between p-5 text-left cursor-pointer" onclick="toggleFaq(this)">
+              <span class="text-white font-semibold text-sm pr-4">Is there a student or open-source discount?</span>
+              <svg class="faq-chevron w-5 h-5 text-[#6a6a7a] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p class="px-5 pb-5 text-[#8a8a9a] text-sm leading-relaxed">Reach out. We're happy to work something out for students and active open-source contributors.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 10. EMAIL CAPTURE                                            -->
+    <!-- ============================================================ -->
+    <section id="early-access" class="py-20 md:py-28 border-t border-white/5">
+      <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+        <div class="fade-in">
+          <h2 class="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">Join the build.</h2>
+          <p class="text-[#8a8a9a] text-lg mb-4">Your AI is waiting for a manager.</p>
+          <p class="text-[#8a8a9a] mb-8">You've got the models. You've got the ideas. You just need the orchestration layer that turns them into parallel execution with full visibility and control.</p>
+
+          <form class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mb-4" action="https://buttondown.com/api/emails/embed-subscribe/theconstruct" method="post" target="popupwindow">
+            <input type="email" name="email" placeholder="Enter your email" aria-label="Email address" required
+              class="flex-1 min-h-[48px] px-4 rounded-full border border-white/10 bg-white/5 text-white placeholder-white/40 text-sm focus:outline-none focus:border-accent/50">
+            <button type="submit" class="inline-flex items-center justify-center px-6 py-3 rounded-full bg-accent text-[#0a0a0f] font-semibold text-sm hover:bg-accent-hover transition whitespace-nowrap cursor-pointer">
+              Get Early Access
+            </button>
           </form>
-          <p class="micro">No spam. Just launch updates, early access, and the occasional field note from the build.</p>
+          <p class="text-[#6a6a7a] text-xs">No spam. Just launch updates, early access, and the occasional field note from the build.</p>
         </div>
       </div>
     </section>
+
   </main>
 
-  <footer>
-    <div class="wrap footer-grid">
-      <div class="footer-brand">
-        <div style="display:flex; align-items:center; gap:14px;">
-          <img class="footer-chair-logo" src="./chair-logo.png" alt="R3 chair logo" />
+  <!-- ============================================================ -->
+  <!-- 11. FOOTER                                                   -->
+  <!-- ============================================================ -->
+  <footer class="border-t border-white/5 py-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+        <div class="flex items-center gap-3">
+          <img src="./chair-logo.png" alt="The Construct" class="w-10 h-10 object-contain opacity-80">
           <div>
-            <strong style="display:block; color:#fcfbf9; margin-bottom:4px; font-size:1.15rem; letter-spacing:-0.03em;">The Construct</strong>
-            <span>Your agents already run on OpenClaw. The Construct makes you the Architect.</span>
+            <span class="text-white font-bold text-sm block">The Construct</span>
+            <span class="text-[#6a6a7a] text-xs">One prompt and you're in control.</span>
           </div>
         </div>
-      </div>
-      <div>
-        <div class="footer-links">
-          <a href="https://theconstructapp.com">theconstructapp.com</a>
-          <a href="https://openclaw.ai">OpenClaw</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#faq">FAQ</a>
-          <a href="#early-access">Early Access</a>
+        <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+          <a href="https://theconstructapp.com" class="text-[#8a8a9a] hover:text-white transition no-underline">theconstructapp.com</a>
+          <a href="https://x.com/NeoAgentOps" class="text-[#8a8a9a] hover:text-white transition no-underline">@NeoAgentOps</a>
+          <a href="#pricing" class="text-[#8a8a9a] hover:text-white transition no-underline">Pricing</a>
+          <a href="#faq" class="text-[#8a8a9a] hover:text-white transition no-underline">FAQ</a>
+          <a href="#early-access" class="text-[#8a8a9a] hover:text-white transition no-underline">Early Access</a>
         </div>
       </div>
     </div>
   </footer>
 
+  <!-- ============================================================ -->
+  <!-- JAVASCRIPT                                                   -->
+  <!-- ============================================================ -->
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      document.querySelectorAll('.carousel').forEach(function (carousel) {
-        var track = carousel.querySelector('.carousel-track');
-        var slides = carousel.querySelectorAll('.carousel-slide');
-        var dots = carousel.querySelectorAll('.carousel-dot');
-        var prevBtn = carousel.querySelector('.carousel-nav.prev');
-        var nextBtn = carousel.querySelector('.carousel-nav.next');
-        var interval = parseInt(carousel.dataset.interval, 10) || 4000;
-        var current = 0;
-        var timer;
-
-        function goTo(index) {
-          if (index < 0) index = slides.length - 1;
-          if (index >= slides.length) index = 0;
-          current = index;
-          track.style.transform = 'translateX(-' + (current * 100) + '%)';
-          dots.forEach(function (d, i) {
-            d.classList.toggle('active', i === current);
-          });
-        }
-
-        function startAuto() {
-          stopAuto();
-          timer = setInterval(function () { goTo(current + 1); }, interval);
-        }
-
-        function stopAuto() {
-          if (timer) { clearInterval(timer); timer = null; }
-        }
-
-        if (prevBtn) prevBtn.addEventListener('click', function () { goTo(current - 1); startAuto(); });
-        if (nextBtn) nextBtn.addEventListener('click', function () { goTo(current + 1); startAuto(); });
-        dots.forEach(function (dot, i) {
-          dot.addEventListener('click', function () { goTo(i); startAuto(); });
+    // ---- Fade-in on scroll via IntersectionObserver ----
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
         });
+      }, { threshold: 0.08 });
 
-        carousel.addEventListener('mouseenter', stopAuto);
-        carousel.addEventListener('mouseleave', startAuto);
-
-        goTo(0);
-        startAuto();
+      document.querySelectorAll('.fade-in').forEach(function (el) {
+        observer.observe(el);
       });
-    });
+    })();
+
+    // ---- FAQ Accordion ----
+    function toggleFaq(btn) {
+      var item = btn.closest('.faq-item');
+      var isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(function (el) {
+        el.classList.remove('open');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+      }
+    }
+
+    // ---- Story expand/collapse with Plausible events ----
+    var storyExpanded = false;
+
+    function toggleStory() {
+      var beats = document.getElementById('story-beats');
+      var text = document.getElementById('story-toggle-text');
+      var icon = document.getElementById('story-toggle-icon');
+
+      if (storyExpanded) {
+        beats.classList.remove('expanded');
+        text.textContent = 'Read the full story';
+        icon.style.transform = '';
+        storyExpanded = false;
+      } else {
+        beats.classList.add('expanded');
+        text.textContent = 'Collapse story';
+        icon.style.transform = 'rotate(180deg)';
+        storyExpanded = true;
+        plausible('Story Expand', { props: { section: 'blownpdx' } });
+        initStorySentinels();
+      }
+    }
+
+    // ---- Story scroll-depth tracking ----
+    var storyTracked = {};
+    var storyObserver = null;
+
+    function initStorySentinels() {
+      if (storyObserver) return;
+
+      storyObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            var depth = entry.target.getAttribute('data-story-sentinel');
+            if (depth && !storyTracked[depth]) {
+              storyTracked[depth] = true;
+              plausible('Story Scroll', { props: { depth: depth } });
+            }
+          }
+        });
+      }, { threshold: 0.5 });
+
+      document.querySelectorAll('[data-story-sentinel]').forEach(function (el) {
+        storyObserver.observe(el);
+      });
+    }
   </script>
+
 </body>
 </html>
