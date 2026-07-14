@@ -1,10 +1,10 @@
 {
-  "version": "0.1.55",
-  "notes": "The Construct 0.1.55",
-  "pub_date": "2026-07-12T14:25:46Z",
+  "version": "0.1.56",
+  "notes": "The Construct 0.1.56",
+  "pub_date": "2026-07-14T02:36:26Z",
   "platforms": {
     "darwin-aarch64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRZkhFcndWN0tNMUJwYW1zenRBeUdTVlErTXJKNkRBV1Vadmt1SktjVHF1RVdBaWE3NVZqeTVlRDhKbVlQeFRkcTZkYVE3QjVDVDRBZ1ZnS3NoRTVnV1pDSnFCeFJOSVFZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgzODY2MTgwCWZpbGU6VGhlIENvbnN0cnVjdC5hcHAudGFyLmd6Ck9BQkpnOU5aSTZhQVRUVjZzTjlrUkZRRGx4WUJyOVBteXZ6WmR0UFlrWjdCY3hVWUpuYkcwbW9jMVRUVVdPOG14T0R6ZmxTZWwwYzdsWXl1a0hWZ0FBPT0K",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRZkhFcndWN0tNMUV1YmdpUW1hQnhraTlVK3huczdPejVoeWdCakFmcFFCSVdMN3ZEdjdjYUhneVJHcmh0ZDR0WEdCSmlrbmFYdDlyeEt4T3pUU3puSVJFa3pPUlN5NkFZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgzOTk2NDA4CWZpbGU6VGhlIENvbnN0cnVjdC5hcHAudGFyLmd6ClB1aW1XM1Mzc0F3UmpPazBjRHhhRlA1dnpyckk2RDEvNG5Sd0IyWnlRRC9DaUpYcU9sSVBBc1Z2MDd3MDg2Ty9EMlkzdUw4d2RxTS81SGdYZUhtUERRPT0K",
       "url": "https://theconstructapp.com/updater/The%20Construct.app.tar.gz"
     }
   }
